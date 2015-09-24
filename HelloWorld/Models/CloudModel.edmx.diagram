@@ -25,6 +25,8 @@
         <AssociationConnector Association="CloudRepositoryModel.FK_ServiceCategory_ServiceCategory" ManuallyRouted="false" />
         <AssociationConnector Association="CloudRepositoryModel.FK_ServiceLog_ServiceVersion" ManuallyRouted="false" />
         <AssociationConnector Association="CloudRepositoryModel.FK_Workflow_ServiceVersion" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="CloudRepositoryModel.Parameter" Width="1.5" PointX="5.375" PointY="0.75" />
+        <AssociationConnector Association="CloudRepositoryModel.FK_Parameter_Operation" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

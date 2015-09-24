@@ -47,10 +47,10 @@
                 @Html.DisplayFor(modelItem => item.Specifications)
             </td>
             <td>
-                @foreach (var element in item.UsingServices)
+                @foreach (Tuple<int,string> element in item.UsingServices)
                 {
                     <p>
-                        @Html.ActionLink(element, "Details", "ServiceVersions")
+                        @Html.ActionLink(element.Item2, "Details", "ServiceVersions",new { @id= element.Item1 },string.Empty)
                     </p>
                 }
             </td>

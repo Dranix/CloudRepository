@@ -13,27 +13,37 @@ namespace HelloWorld.App_Start
         public static void RegisterMappings()
         {
             Mapper.CreateMap<ServiceCategoryVM, ServiceCategory>().ReverseMap();
+
             Mapper.CreateMap<ServiceProviderVM, ServiceProvider>().ReverseMap();
+
             Mapper.CreateMap<ServiceVM, Service>().ReverseMap();
+
             Mapper.CreateMap<OperationVM, Operation>().ReverseMap();
-            Mapper.CreateMap<ServiceVersionVM, ServiceVersion>().ReverseMap();
+
+            Mapper.CreateMap<ServiceVersion, ServiceVersionVM>()
+                .ForMember(dest => dest.Version, op => op.MapFrom(x => x.Service.ServiceName + " " + x.Version)).ReverseMap();
+
             Mapper.CreateMap<ServiceLogVM, ServiceLog>().ReverseMap();
+
             Mapper.CreateMap<EnterpriseApplication, EnterpriseApplicationVM>().
                 ForMember(dest => dest.UsingServices, op =>
                         op.ResolveUsing<CustomConvert>()
                             .FromMember(x => x.Workflows));
             Mapper.CreateMap<EnterpriseApplicationVM, EnterpriseApplication>();
+
+            Mapper.CreateMap<ParameterVM, Parameter>().ReverseMap();
         }
     }
 
-    public class CustomConvert : ValueResolver<ICollection<Workflow>, Collection<string>>
+    public class CustomConvert : ValueResolver<ICollection<Workflow>, Collection<Tuple<int, string>>>
     {
-        protected override Collection<string> ResolveCore(ICollection<Workflow> source)
+        protected override Collection<Tuple<int, string>> ResolveCore(ICollection<Workflow> source)
         {
-            Collection<string> result = new Collection<string>();
-            foreach(var wf in source)
+            Collection<Tuple<int, string>> result = new Collection<Tuple<int, string>>();
+            foreach (var wf in source)
             {
-                result.Add(String.Format("{0} {1}", wf.ServiceVersion.Service.ServiceName, wf.ServiceVersion.Version));
+                Tuple<int, string> tuple = new Tuple<int, string>(wf.ServiceVersionId, String.Format("{0} {1}", wf.ServiceVersion.Service.ServiceName, wf.ServiceVersion.Version));
+                result.Add(tuple);
             }
 
             return result;

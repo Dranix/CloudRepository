@@ -38,9 +38,8 @@ namespace HelloWorld.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
                 vm = vm.Where(s => s.ApplicationName != null && s.ApplicationName.ToLower().Contains(searchString)
-                                       || s.Specifications != null && s.Specifications.ToLower().Contains(searchString)).ToList();
-                
-                                //       || s.UsingServices != null && s.UsingServices.ToLower().Contains(searchString)
+                                       || s.Specifications != null && s.Specifications.ToLower().Contains(searchString)
+                                       || s.UsingServices != null && s.UsingServices.Any(us => us.Item2.ToLower().Contains(searchString))).ToList();
             }
 
             switch (sortOrder)
@@ -98,6 +97,13 @@ namespace HelloWorld.Controllers
         // GET: EnterpriseApplications/Create
         public ActionResult Create()
         {
+            GetServiceVersionList();
+
+            return View();
+        }
+
+        private void GetServiceVersionList()
+        {
             var serviceVersionList = db.ServiceVersions.Select(sv => new
             {
                 ServiceVersionId = sv.ServiceVersionId,
@@ -105,8 +111,6 @@ namespace HelloWorld.Controllers
             }).ToList();
 
             ViewBag.ServiceVersionList = new MultiSelectList(serviceVersionList, "ServiceVersionId", "ServiceName");
-
-            return View();
         }
 
         // POST: EnterpriseApplications/Create
@@ -125,7 +129,7 @@ namespace HelloWorld.Controllers
 
                 if (insertedRecord > 0)
                 {
-                    if (serviceVersionList != null && serviceVersionList .Count()> 0)
+                    if (serviceVersionList != null && serviceVersionList.Count() > 0)
                     {
                         Workflow workFlow = new Workflow();
                         foreach (int serviceVersionId in serviceVersionList)
@@ -157,6 +161,8 @@ namespace HelloWorld.Controllers
             {
                 return HttpNotFound();
             }
+
+            GetServiceVersionList();
             var vm = AutoMapper.Mapper.Map<EnterpriseApplicationVM>(enterpriseApplication);
             return View(vm);
         }
@@ -166,14 +172,30 @@ namespace HelloWorld.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EnterpriseApplicationId,ApplicationName,Specifications,UsingServices")] EnterpriseApplicationVM enterpriseApplicationVM)
+        public ActionResult Edit([Bind(Include = "EnterpriseApplicationId,ApplicationName,Specifications,UsingServices")] EnterpriseApplicationVM enterpriseApplicationVM, int[] serviceVersionList)
         {
             var enterpriseApplication = AutoMapper.Mapper.Map<EnterpriseApplication>(enterpriseApplicationVM);
 
             if (ModelState.IsValid)
             {
                 db.Entry(enterpriseApplication).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
+                int insertedRecord = db.SaveChanges();
+
+                if (insertedRecord > 0)
+                {
+                    if (serviceVersionList != null && serviceVersionList.Count() > 0)
+                    {
+                        Workflow workFlow = new Workflow();
+                        foreach (int serviceVersionId in serviceVersionList)
+                        {
+                            workFlow.EnterpriseApplicationId = enterpriseApplication.EnterpriseApplicationId;
+                            workFlow.ServiceVersionId = serviceVersionId;
+                            db.Workflows.Add(workFlow);
+
+                            db.SaveChanges();
+                        }
+                    }
+                }
                 return RedirectToAction("Index");
             }
             return View(enterpriseApplication);

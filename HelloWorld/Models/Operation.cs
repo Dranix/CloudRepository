@@ -14,11 +14,18 @@ namespace HelloWorld.Models
     
     public partial class Operation
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Operation()
+        {
+            this.Parameters = new HashSet<Parameter>();
+        }
+    
         public int OperationId { get; set; }
         public int ServiceVersionId { get; set; }
         public string OperationName { get; set; }
-        public string ServiceParameter { get; set; }
     
         public virtual ServiceVersion ServiceVersion { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Parameter> Parameters { get; set; }
     }
 }

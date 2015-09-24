@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="CloudRepositoryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="CloudRepositoryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="EnterpriseApplication">
           <Key>
             <PropertyRef Name="EnterpriseApplicationId" />
@@ -20,7 +20,16 @@
           <Property Name="OperationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ServiceVersionId" Type="int" Nullable="false" />
           <Property Name="OperationName" Type="varchar(max)" />
-          <Property Name="ServiceParameter" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="Parameter">
+          <Key>
+            <PropertyRef Name="ParameterId" />
+          </Key>
+          <Property Name="ParameterId" Type="int" Nullable="false" />
+          <Property Name="ParameterName" Type="nvarchar(max)" />
+          <Property Name="ParameterType" Type="nvarchar(max)" />
+          <Property Name="ParameterDescription" Type="nvarchar(max)" />
+          <Property Name="OperationId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Service">
           <Key>
@@ -117,6 +126,20 @@
             </Principal>
             <Dependent Role="Operation">
               <PropertyRef Name="ServiceVersionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Parameter_Operation">
+          <End Role="Operation" Type="Self.Operation" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Parameter" Type="Self.Parameter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Operation">
+              <PropertyRef Name="OperationId" />
+            </Principal>
+            <Dependent Role="Parameter">
+              <PropertyRef Name="OperationId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -239,6 +262,7 @@
         <EntityContainer Name="CloudRepositoryModelStoreContainer">
           <EntitySet Name="EnterpriseApplication" EntityType="Self.EnterpriseApplication" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Operation" EntityType="Self.Operation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Parameter" EntityType="Self.Parameter" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Service" EntityType="Self.Service" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ServiceCategory" EntityType="Self.ServiceCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ServiceLog" EntityType="Self.ServiceLog" Schema="dbo" store:Type="Tables" />
@@ -250,6 +274,10 @@
           <AssociationSet Name="FK_Operation_ServiceVersion" Association="Self.FK_Operation_ServiceVersion">
             <End Role="ServiceVersion" EntitySet="ServiceVersion" />
             <End Role="Operation" EntitySet="Operation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Parameter_Operation" Association="Self.FK_Parameter_Operation">
+            <End Role="Operation" EntitySet="Operation" />
+            <End Role="Parameter" EntitySet="Parameter" />
           </AssociationSet>
           <AssociationSet Name="FK_Service_ServiceCategory" Association="Self.FK_Service_ServiceCategory">
             <End Role="ServiceCategory" EntitySet="ServiceCategory" />
@@ -288,8 +316,7 @@
             <End Role="Workflow" EntitySet="Workflow" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CloudRepositoryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -309,8 +336,8 @@
           <Property Name="OperationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ServiceVersionId" Type="Int32" Nullable="false" />
           <Property Name="OperationName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="ServiceParameter" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ServiceVersion" Relationship="Self.FK_Operation_ServiceVersion" FromRole="Operation" ToRole="ServiceVersion" />
+          <NavigationProperty Name="Parameters" Relationship="CloudRepositoryModel.FK_Parameter_Operation" FromRole="Operation" ToRole="Parameter" />
         </EntityType>
         <EntityType Name="Service">
           <Key>
@@ -595,7 +622,37 @@
             <End Role="ServiceVersion" EntitySet="ServiceVersions" />
             <End Role="Workflow" EntitySet="Workflows" />
           </AssociationSet>
+          <EntitySet Name="Parameters" EntityType="CloudRepositoryModel.Parameter" />
+          <AssociationSet Name="FK_Parameter_Operation" Association="CloudRepositoryModel.FK_Parameter_Operation">
+            <End Role="Operation" EntitySet="Operations" />
+            <End Role="Parameter" EntitySet="Parameters" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Parameter">
+          <Key>
+            <PropertyRef Name="ParameterId" />
+          </Key>
+          <Property Name="ParameterId" Type="Int32" Nullable="false" />
+          <Property Name="ParameterName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ParameterType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ParameterDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OperationId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Operation" Relationship="CloudRepositoryModel.FK_Parameter_Operation" FromRole="Parameter" ToRole="Operation" />
+        </EntityType>
+        <Association Name="FK_Parameter_Operation">
+          <End Type="CloudRepositoryModel.Operation" Role="Operation" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="CloudRepositoryModel.Parameter" Role="Parameter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Operation">
+              <PropertyRef Name="OperationId" />
+            </Principal>
+            <Dependent Role="Parameter">
+              <PropertyRef Name="OperationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -617,7 +674,6 @@
                 <ScalarProperty Name="OperationId" ColumnName="OperationId" />
                 <ScalarProperty Name="ServiceVersionId" ColumnName="ServiceVersionId" />
                 <ScalarProperty Name="OperationName" ColumnName="OperationName" />
-                <ScalarProperty Name="ServiceParameter" ColumnName="ServiceParameter" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -710,6 +766,17 @@
                 <ScalarProperty Name="WorkflowId" ColumnName="WorkflowId" />
                 <ScalarProperty Name="ServiceVersionId" ColumnName="ServiceVersionId" />
                 <ScalarProperty Name="EnterpriseApplicationId" ColumnName="EnterpriseApplicationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Parameters">
+            <EntityTypeMapping TypeName="CloudRepositoryModel.Parameter">
+              <MappingFragment StoreEntitySet="Parameter">
+                <ScalarProperty Name="OperationId" ColumnName="OperationId" />
+                <ScalarProperty Name="ParameterDescription" ColumnName="ParameterDescription" />
+                <ScalarProperty Name="ParameterType" ColumnName="ParameterType" />
+                <ScalarProperty Name="ParameterName" ColumnName="ParameterName" />
+                <ScalarProperty Name="ParameterId" ColumnName="ParameterId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

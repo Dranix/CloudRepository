@@ -68,8 +68,6 @@ namespace HelloWorld.Controllers
                     vm = vm.OrderByDescending(m => m.EndpointUrl).ToList();
                     break;
 
-                    ViewBag.SortAdaptorURL = Helper.SetSortViewBag(sortOrder, "AdaptorURL", "AdaptorURL_Desc");
-                    ViewBag.SortServiceName = Helper.SetSortViewBag(sortOrder, "ServiceName", "ServiceName_Desc");
                 case "WSDL":
                     vm = vm.OrderBy(m => m.WSDL).ToList();
                     break;

@@ -4,15 +4,29 @@
     ViewBag.Title = "Create";
     ViewBag.Sidemenu = true;
 }
+@Scripts.Render("~/bundles/jquery")
+<script type="text/javascript">
+    $(document).ready(function () {
+        var x = 1; //initlal text box count
+        $("#add_field_button").click(function (e) { //on add input button click
+            e.preventDefault();
+            x++; //text box increment
+            $("#insert").after('<div class="form-group"><label class="control-label col-md-2"></label><div class="col-md-2"><input type="text" class="form-control" placeholder="Name"></div><div class="col-md-2"><input type="text" class="form-control" placeholder="Type"></div><div class="col-md-4"><input type="text" class="form-control" placeholder="Description"></div><a href="#" id="remove_field">Remove</a></div>'); //add input box
+        });
 
+        $("#input_fields_wrap").on("click", "#remove_field", function (e) { //user click on remove text
+            e.preventDefault(); $(this).parent('div').remove(); x--;
+        })
+    });
+</script>
 <h2>Create</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
+
+    <div class="form-horizontal" id="input_fields_wrap">
         <h4>Operation</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -33,11 +47,16 @@
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ServiceParameter, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ServiceParameter, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ServiceParameter, "", new { @class = "text-danger" })
+        <div class="form-group" id="insert">
+            <label class="control-label col-md-2" id="add_field_button"><a>Add Parameter</a></label>
+            <div class="col-md-2">
+                <input type="text" class="form-control" placeholder="Name">
+            </div>
+            <div class="col-md-2">
+                <input type="text" class="form-control" placeholder="Type">
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" placeholder="Description">
             </div>
         </div>
 

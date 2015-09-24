@@ -12,8 +12,6 @@ namespace HelloWorld.Models.ViewModels
         public int ServiceVersionId { get; set; }
         [Display(Name = "Operation Name")]
         public string OperationName { get; set; }
-        [Display(Name = "Service Parameter")]
-        public string ServiceParameter { get; set; }
 
         public virtual ServiceVersion ServiceVersion { get; set; }
     }

@@ -37,7 +37,8 @@ namespace HelloWorld.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
                 vm = vm.Where(s => s.OperationName != null && s.OperationName.ToLower().Contains(searchString)
-                                       || s.ServiceParameter != null && s.ServiceParameter.ToLower().Contains(searchString)).ToList();
+                                       //|| s.ServiceParameter != null && s.ServiceParameter.ToLower().Contains(searchString)
+                                       ).ToList();
             }
 
             switch (sortOrder)
@@ -51,20 +52,12 @@ namespace HelloWorld.Controllers
                     break;
 
                 case "ServiceParameter":
-                    vm = vm.OrderBy(m => m.ServiceParameter).ToList();
+                    //vm = vm.OrderBy(m => m.ServiceParameter).ToList();
                     break;
 
                 case "ServiceParameter_Desc":
-                    vm = vm.OrderByDescending(m => m.ServiceParameter).ToList();
+                    //vm = vm.OrderByDescending(m => m.ServiceParameter).ToList();
                     break;
-
-                //case "UsingServices":
-                //    vm = vm.OrderBy(m => m.UsingServices).ToList();
-                //    break;
-
-                //case "UsingServices_Desc":
-                //    vm = vm.OrderByDescending(m => m.UsingServices).ToList();
-                //    break;
 
                 default:
                     vm = vm.OrderBy(m => m.OperationId).ToList();
@@ -95,7 +88,8 @@ namespace HelloWorld.Controllers
         // GET: Operations/Create
         public ActionResult Create()
         {
-            ViewBag.ServiceVersionId = new SelectList(db.ServiceVersions, "ServiceVersionId", "Version");
+            var vm = AutoMapper.Mapper.Map<List<ServiceVersionVM>>(db.ServiceVersions.ToList());
+            ViewBag.ServiceVersionId = new SelectList(vm, "ServiceVersionId", "Version");
             return View();
         }
 

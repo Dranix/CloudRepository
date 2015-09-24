@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace HelloWorld.Models.ViewModels
@@ -16,7 +17,7 @@ namespace HelloWorld.Models.ViewModels
         public string ApplicationName { get; set; }
         public string Specifications { get; set; }
         [Display(Name = "Using Services")]
-        public ICollection<string> UsingServices { get; set; }
+        public ICollection<Tuple<int,string>> UsingServices { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Workflow> Workflows { get; set; }

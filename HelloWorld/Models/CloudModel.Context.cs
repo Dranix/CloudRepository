@@ -35,5 +35,6 @@ namespace HelloWorld.Models
         public virtual DbSet<Similar> Similars { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<Workflow> Workflows { get; set; }
+        public virtual DbSet<Parameter> Parameters { get; set; }
     }
 }
