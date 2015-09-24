@@ -1,0 +1,50 @@
+﻿@model HelloWorld.Models.Parameter
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Parameter</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Operation.OperationName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Operation.OperationName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ParameterName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ParameterName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ParameterType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ParameterType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ParameterDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ParameterDescription)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ParameterId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

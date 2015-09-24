@@ -35,5 +35,9 @@ namespace HelloWorld.Models
         public System.Data.Entity.DbSet<HelloWorld.Models.ServiceVersion> ServiceVersions { get; set; }
 
         public System.Data.Entity.DbSet<HelloWorld.Models.Service> Services { get; set; }
+
+        public System.Data.Entity.DbSet<HelloWorld.Models.Operation> Operations { get; set; }
+
+        public System.Data.Entity.DbSet<HelloWorld.Models.Parameter> Parameters { get; set; }
     }
 }

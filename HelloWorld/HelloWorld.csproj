@@ -189,6 +189,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OperationsController.cs" />
+    <Compile Include="Controllers\ParametersController.cs" />
     <Compile Include="Controllers\ServiceCategoriesController.cs" />
     <Compile Include="Controllers\ServiceLogsController.cs" />
     <Compile Include="Controllers\ServiceProvidersController.cs" />
@@ -264,6 +265,8 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Content\Resources\add.png" />
+    <Content Include="Content\Resources\cross.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -377,6 +380,11 @@
     <Content Include="Views\ServiceCategories\Details.cshtml" />
     <Content Include="Views\ServiceCategories\Edit.cshtml" />
     <Content Include="Views\ServiceCategories\Index.cshtml" />
+    <Content Include="Views\Parameters\Create.cshtml" />
+    <Content Include="Views\Parameters\Delete.cshtml" />
+    <Content Include="Views\Parameters\Details.cshtml" />
+    <Content Include="Views\Parameters\Edit.cshtml" />
+    <Content Include="Views\Parameters\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

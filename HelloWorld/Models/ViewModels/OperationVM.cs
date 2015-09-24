@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace HelloWorld.Models.ViewModels
 {
@@ -14,5 +12,6 @@ namespace HelloWorld.Models.ViewModels
         public string OperationName { get; set; }
 
         public virtual ServiceVersion ServiceVersion { get; set; }
+        public virtual ICollection<Parameter> Parameters { get; set; }
     }
 }

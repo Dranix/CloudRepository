@@ -98,13 +98,26 @@ namespace HelloWorld.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "OperationId,ServiceVersionId,OperationName,ServiceParameter")] OperationVM operationVM)
+        public ActionResult Create([Bind(Include = "OperationId,ServiceVersionId,OperationName,ServiceParameter")] OperationVM operationVM, string[] name, string[] type, string[] description)
         {
             var operation = AutoMapper.Mapper.Map<Operation>(operationVM);
 
             if (ModelState.IsValid)
             {
                 db.Operations.Add(operation);
+                db.SaveChanges();
+
+                for(int i = 0; i < name.Count(); i++)
+                {
+                    Parameter m = new Parameter();
+                    m.ParameterName = name[i];
+                    m.ParameterType = type[i];
+                    m.ParameterDescription = description[i];
+                    m.OperationId = operation.OperationId;
+
+                    db.Parameters.Add(m);
+                }
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

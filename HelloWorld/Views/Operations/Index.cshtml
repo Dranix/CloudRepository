@@ -17,7 +17,7 @@
                 <div class="btn-group">
                     @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class = "form-control", style = "display:inline;", @id = "searchinput" })
                     <span id="searchclear" class="glyphicon glyphicon-remove-circle"></span>
-                </div>  
+                </div>
                 <input type="submit" value="Search" class="btn btn-default" />
             </td>
         </tr>
@@ -44,7 +44,11 @@
                 @Html.DisplayFor(modelItem => item.OperationName)
             </td>
             <td>
-                @*@Html.DisplayFor(modelItem => item.ServiceParameter)*@
+                @foreach (var parameter in item.Parameters)
+                {
+                    <p>@Html.ActionLink(parameter.ParameterName, "Details", "Parameters", new { id = parameter.ParameterId }, string.Empty)</p>
+                }
+
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ServiceVersion.Version)

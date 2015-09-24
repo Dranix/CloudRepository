@@ -27,7 +27,7 @@ namespace HelloWorld.App_Start
 
             Mapper.CreateMap<EnterpriseApplication, EnterpriseApplicationVM>().
                 ForMember(dest => dest.UsingServices, op =>
-                        op.ResolveUsing<CustomConvert>()
+                        op.ResolveUsing<ToUsingServices>()
                             .FromMember(x => x.Workflows));
             Mapper.CreateMap<EnterpriseApplicationVM, EnterpriseApplication>();
 
@@ -35,7 +35,7 @@ namespace HelloWorld.App_Start
         }
     }
 
-    public class CustomConvert : ValueResolver<ICollection<Workflow>, Collection<Tuple<int, string>>>
+    public class ToUsingServices : ValueResolver<ICollection<Workflow>, Collection<Tuple<int, string>>>
     {
         protected override Collection<Tuple<int, string>> ResolveCore(ICollection<Workflow> source)
         {

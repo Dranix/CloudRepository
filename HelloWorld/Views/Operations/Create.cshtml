@@ -7,15 +7,13 @@
 @Scripts.Render("~/bundles/jquery")
 <script type="text/javascript">
     $(document).ready(function () {
-        var x = 1; //initlal text box count
         $("#add_field_button").click(function (e) { //on add input button click
             e.preventDefault();
-            x++; //text box increment
-            $("#insert").after('<div class="form-group"><label class="control-label col-md-2"></label><div class="col-md-2"><input type="text" class="form-control" placeholder="Name"></div><div class="col-md-2"><input type="text" class="form-control" placeholder="Type"></div><div class="col-md-4"><input type="text" class="form-control" placeholder="Description"></div><a href="#" id="remove_field">Remove</a></div>'); //add input box
+            $("#insert").before('<div class="form-group"><label class="control-label col-md-2"></label><div class="col-md-2"><input type="text" class="form-control" placeholder="Name" name="name"></div><div class="col-md-2"><input type="text" class="form-control" placeholder="Type"  name="type"></div><div class="col-md-4"><input type="text" class="form-control" placeholder="Description" style="display:inline;" name="description"><img id="remove_field" src=" /Content/Resources/cross.png" height="38" width="38"/></div></div>'); //add input box
         });
 
         $("#input_fields_wrap").on("click", "#remove_field", function (e) { //user click on remove text
-            e.preventDefault(); $(this).parent('div').remove(); x--;
+            e.preventDefault(); $(this).parent('div').parent('div').remove(); 
         })
     });
 </script>
@@ -47,20 +45,21 @@
             </div>
         </div>
 
-        <div class="form-group" id="insert">
-            <label class="control-label col-md-2" id="add_field_button"><a>Add Parameter</a></label>
+        <div class="form-group">
+            <label class="control-label col-md-2">Parameter</label>
             <div class="col-md-2">
-                <input type="text" class="form-control" placeholder="Name">
+                <input type="text" class="form-control" placeholder="Name" name="name">
             </div>
             <div class="col-md-2">
-                <input type="text" class="form-control" placeholder="Type">
+                <input type="text" class="form-control" placeholder="Type" name="type">
             </div>
             <div class="col-md-4">
-                <input type="text" class="form-control" placeholder="Description">
+                <input type="text" class="form-control" style="display:inline;" placeholder="Description" name="description">
+                <img id="add_field_button" src=" ~/Content/Resources/add.png" height="38" width="38" />
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group"  id="insert">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
