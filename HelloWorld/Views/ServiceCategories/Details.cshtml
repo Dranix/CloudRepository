@@ -1,0 +1,35 @@
+﻿@model HelloWorld.Models.ViewModels.ServiceCategoryVM
+
+@{
+    ViewBag.Title = "Details";
+    ViewBag.Sidemenu = true;
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ServiceCategory</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Parent Category
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ParentCategory.CategoryName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CategoryName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CategoryName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ServiceCategoryId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,51 @@
+﻿@model HelloWorld.Models.ViewModels.ServiceProviderVM
+
+@{
+    ViewBag.Title = "Details";
+    ViewBag.Sidemenu = true;
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Service Provider</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ProviderName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProviderName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Website)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Website)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Phone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Phone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SupportEmail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SupportEmail)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ServiceProviderId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,98 @@
+﻿@model HelloWorld.Models.ViewModels.ServiceVM
+
+@{
+    ViewBag.Title = "Details";
+    ViewBag.Sidemenu = true;
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Service</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceDescription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SLA)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SLA)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SupportUrl)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SupportUrl)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceCost)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceCost)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceSecurity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceSecurity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceType)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceCategory.CategoryName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceCategory.CategoryName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceProvider.ProviderName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceProvider.ProviderName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ServiceId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

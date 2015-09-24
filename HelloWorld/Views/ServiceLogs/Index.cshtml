@@ -1,0 +1,77 @@
+﻿@model PagedList.IPagedList<HelloWorld.Models.ViewModels.ServiceLogVM>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = "Service Log";
+    ViewBag.Sidemenu = true;
+}
+
+<h2>Service Log</h2>
+
+@using (Html.BeginForm("Index", "ServiceLogs", FormMethod.Get))
+{
+    <table class="table" style="margin-bottom: 0px;">
+        <tr>
+            <td><input type="button" class="btn btn-default" value="Create" onclick="location.href='@Url.Action("Create", "ServiceLogs")'" /></td>
+            <td align="right">
+                <div class="btn-group">
+                    @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class = "form-control", style = "display:inline;", @id = "searchinput" })
+                    <span id="searchclear" class="glyphicon glyphicon-remove-circle"></span>
+                </div>
+                <input type="submit" value="Search" class="btn btn-default" />
+            </td>
+        </tr>
+    </table>
+}
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Execution Start Time", "Index", new { sortOrder = ViewBag.SortExecutionStartTime, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Execution End Time", "Index", new { sortOrder = ViewBag.SortExecutionEndTime, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Log Message", "Index", new { sortOrder = ViewBag.SortLogMessage, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Audit Status", "Index", new { sortOrder = ViewBag.SortAuditStatus, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Version", "Index", new { sortOrder = ViewBag.SortVersion, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExecutionStartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExecutionEndTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LogMessage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AuditStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceVersion.Version)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ServiceLogId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ServiceLogId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ServiceLogId })
+            </td>
+        </tr>
+    }
+
+</table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

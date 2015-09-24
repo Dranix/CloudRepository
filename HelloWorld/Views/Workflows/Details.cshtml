@@ -1,0 +1,34 @@
+﻿@model HelloWorld.Models.Workflow
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Workflow</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.EnterpriseApplication.ApplicationName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EnterpriseApplication.ApplicationName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceVersion.Version)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceVersion.Version)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.WorkflowId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

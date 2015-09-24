@@ -1,0 +1,145 @@
+﻿@model PagedList.IPagedList<HelloWorld.Models.ViewModels.ServiceVM>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@{
+    ViewBag.Title = "Service";
+    ViewBag.Sidemenu = true;
+}
+@Scripts.Render("~/bundles/jquery")
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.too-long').popover();
+
+
+
+        $('.too-long').click(function (e) {
+            $('.popover-title').append('<button id="popovercloseid" type="button" class="close">&times;</button>');
+            $(this).popover();
+
+        });
+
+        $(document).click(function (e) {
+            if (e.target.id == "popovercloseid") {
+                $('.too-long').popover('hide');
+            }
+
+        });
+    });
+</script>
+<style>
+    .truncate {
+        width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+<h2>Service</h2>
+
+@using (Html.BeginForm("Index", "Services", FormMethod.Get))
+{
+    <table class="table" style="margin-bottom: 0px;">
+        <tr>
+            <td><input type="button" class="btn btn-default" value="Create" onclick="location.href='@Url.Action("Create", "Services")'" /></td>
+            <td align="right">
+                <div class="btn-group">
+                    @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @class = "form-control", style = "display:inline;", @id = "searchinput" })
+                    <span id="searchclear" class="glyphicon glyphicon-remove-circle"></span>
+                </div>
+                <input type="submit" value="Search" class="btn btn-default" />
+            </td>
+        </tr>
+    </table>
+}
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Service Name", "Index", new { sortOrder = ViewBag.SortServiceName, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Service Description", "Index", new { sortOrder = ViewBag.SortServiceDescription, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("SLA", "Index", new { sortOrder = ViewBag.SortSLA, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Support Url", "Index", new { sortOrder = ViewBag.SortSupportUrl, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Service Cost", "Index", new { sortOrder = ViewBag.SortServiceCost, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Service Security", "Index", new { sortOrder = ViewBag.SortServiceSecurity, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Service Status", "Index", new { sortOrder = ViewBag.SortServiceStatus, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Service Type", "Index", new { sortOrder = ViewBag.SortServiceType, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Category Name", "Index", new { sortOrder = ViewBag.SortCategoryName, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Provider Name", "Index", new { sortOrder = ViewBag.SortProviderName, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceName)
+            </td>
+            <td>
+                <a href="#" class="btn btn-link too-long" title="Service Description" data-content='@Html.DisplayFor(modelItem => item.ServiceDescription)' data-placement="bottom" style="padding:0px;">
+                    <p class="truncate">
+                        @Html.DisplayFor(modelItem => item.ServiceDescription)
+                    </p>
+                </a>
+            </td>
+            <td>
+                <a href="#" class="btn btn-link too-long" title="SLA" data-content='@Html.DisplayFor(modelItem => item.SLA)' data-placement="bottom" style="padding:0px;">
+                    <p class="truncate">
+                        @Html.DisplayFor(modelItem => item.SLA)
+                    </p>
+                </a>
+            </td>
+            <td>
+                <p class="truncate">
+                    <a target="_blank" href="@Html.DisplayFor(modelItem => item.SupportUrl)">@Html.DisplayFor(modelItem => item.SupportUrl)</a>
+                </p>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceCost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceSecurity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceCategory.CategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceProvider.ProviderName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ServiceId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ServiceId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ServiceId })
+            </td>
+        </tr>
+    }
+
+</table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

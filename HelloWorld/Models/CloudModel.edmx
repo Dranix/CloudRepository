@@ -1,0 +1,739 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CloudRepositoryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="EnterpriseApplication">
+          <Key>
+            <PropertyRef Name="EnterpriseApplicationId" />
+          </Key>
+          <Property Name="EnterpriseApplicationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ApplicationName" Type="varchar(max)" />
+          <Property Name="Specifications" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="Operation">
+          <Key>
+            <PropertyRef Name="OperationId" />
+          </Key>
+          <Property Name="OperationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ServiceVersionId" Type="int" Nullable="false" />
+          <Property Name="OperationName" Type="varchar(max)" />
+          <Property Name="ServiceParameter" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="Service">
+          <Key>
+            <PropertyRef Name="ServiceId" />
+          </Key>
+          <Property Name="ServiceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ServiceProviderId" Type="int" Nullable="false" />
+          <Property Name="ServiceCategoryId" Type="int" Nullable="false" />
+          <Property Name="ServiceName" Type="varchar(max)" />
+          <Property Name="ServiceDescription" Type="varchar(max)" />
+          <Property Name="SLA" Type="varchar(max)" />
+          <Property Name="SupportUrl" Type="varchar(max)" />
+          <Property Name="ServiceCost" Type="varchar(max)" />
+          <Property Name="ServiceSecurity" Type="varchar(max)" />
+          <Property Name="ServiceStatus" Type="varchar(max)" />
+          <Property Name="ServiceType" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="ServiceCategory">
+          <Key>
+            <PropertyRef Name="ServiceCategoryId" />
+          </Key>
+          <Property Name="ServiceCategoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ServiceCategoryParent" Type="int" />
+          <Property Name="CategoryName" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="ServiceLog">
+          <Key>
+            <PropertyRef Name="ServiceLogId" />
+          </Key>
+          <Property Name="ServiceLogId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ServiceVersionId" Type="int" />
+          <Property Name="ExecutionStartTime" Type="varchar(max)" />
+          <Property Name="ExecutionEndTime" Type="varchar(max)" />
+          <Property Name="LogMessage" Type="varchar(max)" />
+          <Property Name="AuditStatus" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="ServiceProvider">
+          <Key>
+            <PropertyRef Name="ServiceProviderId" />
+          </Key>
+          <Property Name="ServiceProviderId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProviderName" Type="varchar(max)" />
+          <Property Name="Website" Type="varchar(max)" />
+          <Property Name="Phone" Type="varchar(max)" />
+          <Property Name="SupportEmail" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="ServiceVersion">
+          <Key>
+            <PropertyRef Name="ServiceVersionId" />
+          </Key>
+          <Property Name="ServiceVersionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ServiceId" Type="int" />
+          <Property Name="Version" Type="varchar(max)" />
+          <Property Name="EndpointUrl" Type="varchar(max)" />
+          <Property Name="WSDL" Type="varchar(max)" />
+          <Property Name="Availability" Type="varchar(max)" />
+          <Property Name="ResponseTime" Type="varchar(max)" />
+          <Property Name="AdaptorURL" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="Similar">
+          <Key>
+            <PropertyRef Name="SimilarId" />
+          </Key>
+          <Property Name="SimilarId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ServiceId1" Type="int" Nullable="false" />
+          <Property Name="ServiceId2" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Workflow">
+          <Key>
+            <PropertyRef Name="WorkflowId" />
+          </Key>
+          <Property Name="WorkflowId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ServiceVersionId" Type="int" Nullable="false" />
+          <Property Name="EnterpriseApplicationId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Operation_ServiceVersion">
+          <End Role="ServiceVersion" Type="Self.ServiceVersion" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Operation" Type="Self.Operation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ServiceVersion">
+              <PropertyRef Name="ServiceVersionId" />
+            </Principal>
+            <Dependent Role="Operation">
+              <PropertyRef Name="ServiceVersionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Service_ServiceCategory">
+          <End Role="ServiceCategory" Type="Self.ServiceCategory" Multiplicity="1" />
+          <End Role="Service" Type="Self.Service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ServiceCategory">
+              <PropertyRef Name="ServiceCategoryId" />
+            </Principal>
+            <Dependent Role="Service">
+              <PropertyRef Name="ServiceCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Service_ServiceProvider">
+          <End Role="ServiceProvider" Type="Self.ServiceProvider" Multiplicity="1" />
+          <End Role="Service" Type="Self.Service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ServiceProvider">
+              <PropertyRef Name="ServiceProviderId" />
+            </Principal>
+            <Dependent Role="Service">
+              <PropertyRef Name="ServiceProviderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ServiceCategory_ServiceCategory">
+          <End Role="ServiceCategory" Type="Self.ServiceCategory" Multiplicity="0..1" />
+          <End Role="ServiceCategory1" Type="Self.ServiceCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ServiceCategory">
+              <PropertyRef Name="ServiceCategoryId" />
+            </Principal>
+            <Dependent Role="ServiceCategory1">
+              <PropertyRef Name="ServiceCategoryParent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ServiceLog_ServiceVersion">
+          <End Role="ServiceVersion" Type="Self.ServiceVersion" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ServiceLog" Type="Self.ServiceLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ServiceVersion">
+              <PropertyRef Name="ServiceVersionId" />
+            </Principal>
+            <Dependent Role="ServiceLog">
+              <PropertyRef Name="ServiceVersionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ServiceVersion_Service">
+          <End Role="Service" Type="Self.Service" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ServiceVersion" Type="Self.ServiceVersion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Service">
+              <PropertyRef Name="ServiceId" />
+            </Principal>
+            <Dependent Role="ServiceVersion">
+              <PropertyRef Name="ServiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Similar_Service">
+          <End Role="Service" Type="Self.Service" Multiplicity="1" />
+          <End Role="Similar" Type="Self.Similar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Service">
+              <PropertyRef Name="ServiceId" />
+            </Principal>
+            <Dependent Role="Similar">
+              <PropertyRef Name="ServiceId1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Similar_Service1">
+          <End Role="Service" Type="Self.Service" Multiplicity="1" />
+          <End Role="Similar" Type="Self.Similar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Service">
+              <PropertyRef Name="ServiceId" />
+            </Principal>
+            <Dependent Role="Similar">
+              <PropertyRef Name="ServiceId2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Workflow_EnterpriseApplication">
+          <End Role="EnterpriseApplication" Type="Self.EnterpriseApplication" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Workflow" Type="Self.Workflow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EnterpriseApplication">
+              <PropertyRef Name="EnterpriseApplicationId" />
+            </Principal>
+            <Dependent Role="Workflow">
+              <PropertyRef Name="EnterpriseApplicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Workflow_ServiceVersion">
+          <End Role="ServiceVersion" Type="Self.ServiceVersion" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Workflow" Type="Self.Workflow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ServiceVersion">
+              <PropertyRef Name="ServiceVersionId" />
+            </Principal>
+            <Dependent Role="Workflow">
+              <PropertyRef Name="ServiceVersionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CloudRepositoryModelStoreContainer">
+          <EntitySet Name="EnterpriseApplication" EntityType="Self.EnterpriseApplication" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Operation" EntityType="Self.Operation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Service" EntityType="Self.Service" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ServiceCategory" EntityType="Self.ServiceCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ServiceLog" EntityType="Self.ServiceLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ServiceProvider" EntityType="Self.ServiceProvider" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ServiceVersion" EntityType="Self.ServiceVersion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Similar" EntityType="Self.Similar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Workflow" EntityType="Self.Workflow" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Operation_ServiceVersion" Association="Self.FK_Operation_ServiceVersion">
+            <End Role="ServiceVersion" EntitySet="ServiceVersion" />
+            <End Role="Operation" EntitySet="Operation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Service_ServiceCategory" Association="Self.FK_Service_ServiceCategory">
+            <End Role="ServiceCategory" EntitySet="ServiceCategory" />
+            <End Role="Service" EntitySet="Service" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Service_ServiceProvider" Association="Self.FK_Service_ServiceProvider">
+            <End Role="ServiceProvider" EntitySet="ServiceProvider" />
+            <End Role="Service" EntitySet="Service" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ServiceCategory_ServiceCategory" Association="Self.FK_ServiceCategory_ServiceCategory">
+            <End Role="ServiceCategory" EntitySet="ServiceCategory" />
+            <End Role="ServiceCategory1" EntitySet="ServiceCategory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ServiceLog_ServiceVersion" Association="Self.FK_ServiceLog_ServiceVersion">
+            <End Role="ServiceVersion" EntitySet="ServiceVersion" />
+            <End Role="ServiceLog" EntitySet="ServiceLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ServiceVersion_Service" Association="Self.FK_ServiceVersion_Service">
+            <End Role="Service" EntitySet="Service" />
+            <End Role="ServiceVersion" EntitySet="ServiceVersion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Similar_Service" Association="Self.FK_Similar_Service">
+            <End Role="Service" EntitySet="Service" />
+            <End Role="Similar" EntitySet="Similar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Similar_Service1" Association="Self.FK_Similar_Service1">
+            <End Role="Service" EntitySet="Service" />
+            <End Role="Similar" EntitySet="Similar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Workflow_EnterpriseApplication" Association="Self.FK_Workflow_EnterpriseApplication">
+            <End Role="EnterpriseApplication" EntitySet="EnterpriseApplication" />
+            <End Role="Workflow" EntitySet="Workflow" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Workflow_ServiceVersion" Association="Self.FK_Workflow_ServiceVersion">
+            <End Role="ServiceVersion" EntitySet="ServiceVersion" />
+            <End Role="Workflow" EntitySet="Workflow" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CloudRepositoryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="EnterpriseApplication">
+          <Key>
+            <PropertyRef Name="EnterpriseApplicationId" />
+          </Key>
+          <Property Name="EnterpriseApplicationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicationName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Specifications" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Workflows" Relationship="Self.FK_Workflow_EnterpriseApplication" FromRole="EnterpriseApplication" ToRole="Workflow" />
+        </EntityType>
+        <EntityType Name="Operation">
+          <Key>
+            <PropertyRef Name="OperationId" />
+          </Key>
+          <Property Name="OperationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ServiceVersionId" Type="Int32" Nullable="false" />
+          <Property Name="OperationName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ServiceParameter" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ServiceVersion" Relationship="Self.FK_Operation_ServiceVersion" FromRole="Operation" ToRole="ServiceVersion" />
+        </EntityType>
+        <EntityType Name="Service">
+          <Key>
+            <PropertyRef Name="ServiceId" />
+          </Key>
+          <Property Name="ServiceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ServiceProviderId" Type="Int32" Nullable="false" />
+          <Property Name="ServiceCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="ServiceName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ServiceDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="SLA" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="SupportUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ServiceCost" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ServiceSecurity" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ServiceStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ServiceType" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ServiceCategory" Relationship="Self.FK_Service_ServiceCategory" FromRole="Service" ToRole="ServiceCategory" />
+          <NavigationProperty Name="ServiceProvider" Relationship="Self.FK_Service_ServiceProvider" FromRole="Service" ToRole="ServiceProvider" />
+          <NavigationProperty Name="ServiceVersions" Relationship="Self.FK_ServiceVersion_Service" FromRole="Service" ToRole="ServiceVersion" />
+          <NavigationProperty Name="Similars" Relationship="Self.FK_Similar_Service" FromRole="Service" ToRole="Similar" />
+          <NavigationProperty Name="Similars1" Relationship="Self.FK_Similar_Service1" FromRole="Service" ToRole="Similar" />
+        </EntityType>
+        <EntityType Name="ServiceCategory">
+          <Key>
+            <PropertyRef Name="ServiceCategoryId" />
+          </Key>
+          <Property Name="ServiceCategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ServiceCategoryParent" Type="Int32" />
+          <Property Name="CategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Services" Relationship="Self.FK_Service_ServiceCategory" FromRole="ServiceCategory" ToRole="Service" />
+          <NavigationProperty Name="ServiceCategory1" Relationship="Self.FK_ServiceCategory_ServiceCategory" FromRole="ServiceCategory" ToRole="ServiceCategory1" />
+          <NavigationProperty Name="ServiceCategory2" Relationship="Self.FK_ServiceCategory_ServiceCategory" FromRole="ServiceCategory1" ToRole="ServiceCategory" />
+        </EntityType>
+        <EntityType Name="ServiceLog">
+          <Key>
+            <PropertyRef Name="ServiceLogId" />
+          </Key>
+          <Property Name="ServiceLogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ServiceVersionId" Type="Int32" />
+          <Property Name="ExecutionStartTime" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ExecutionEndTime" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LogMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="AuditStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ServiceVersion" Relationship="Self.FK_ServiceLog_ServiceVersion" FromRole="ServiceLog" ToRole="ServiceVersion" />
+        </EntityType>
+        <EntityType Name="ServiceProvider">
+          <Key>
+            <PropertyRef Name="ServiceProviderId" />
+          </Key>
+          <Property Name="ServiceProviderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProviderName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Website" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="SupportEmail" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Services" Relationship="Self.FK_Service_ServiceProvider" FromRole="ServiceProvider" ToRole="Service" />
+        </EntityType>
+        <EntityType Name="ServiceVersion">
+          <Key>
+            <PropertyRef Name="ServiceVersionId" />
+          </Key>
+          <Property Name="ServiceVersionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ServiceId" Type="Int32" />
+          <Property Name="Version" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="EndpointUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="WSDL" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Availability" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ResponseTime" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="AdaptorURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Operations" Relationship="Self.FK_Operation_ServiceVersion" FromRole="ServiceVersion" ToRole="Operation" />
+          <NavigationProperty Name="Service" Relationship="Self.FK_ServiceVersion_Service" FromRole="ServiceVersion" ToRole="Service" />
+          <NavigationProperty Name="ServiceLogs" Relationship="Self.FK_ServiceLog_ServiceVersion" FromRole="ServiceVersion" ToRole="ServiceLog" />
+          <NavigationProperty Name="Workflows" Relationship="Self.FK_Workflow_ServiceVersion" FromRole="ServiceVersion" ToRole="Workflow" />
+        </EntityType>
+        <EntityType Name="Similar">
+          <Key>
+            <PropertyRef Name="SimilarId" />
+          </Key>
+          <Property Name="SimilarId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ServiceId1" Type="Int32" Nullable="false" />
+          <Property Name="ServiceId2" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Service" Relationship="Self.FK_Similar_Service" FromRole="Similar" ToRole="Service" />
+          <NavigationProperty Name="Service1" Relationship="Self.FK_Similar_Service1" FromRole="Similar" ToRole="Service" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Workflow">
+          <Key>
+            <PropertyRef Name="WorkflowId" />
+          </Key>
+          <Property Name="WorkflowId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ServiceVersionId" Type="Int32" Nullable="false" />
+          <Property Name="EnterpriseApplicationId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="EnterpriseApplication" Relationship="Self.FK_Workflow_EnterpriseApplication" FromRole="Workflow" ToRole="EnterpriseApplication" />
+          <NavigationProperty Name="ServiceVersion" Relationship="Self.FK_Workflow_ServiceVersion" FromRole="Workflow" ToRole="ServiceVersion" />
+        </EntityType>
+        <Association Name="FK_Workflow_EnterpriseApplication">
+          <End Role="EnterpriseApplication" Type="Self.EnterpriseApplication" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Workflow" Type="Self.Workflow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EnterpriseApplication">
+              <PropertyRef Name="EnterpriseApplicationId" />
+            </Principal>
+            <Dependent Role="Workflow">
+              <PropertyRef Name="EnterpriseApplicationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Operation_ServiceVersion">
+          <End Role="ServiceVersion" Type="Self.ServiceVersion" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Operation" Type="Self.Operation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ServiceVersion">
+              <PropertyRef Name="ServiceVersionId" />
+            </Principal>
+            <Dependent Role="Operation">
+              <PropertyRef Name="ServiceVersionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Service_ServiceCategory">
+          <End Role="ServiceCategory" Type="Self.ServiceCategory" Multiplicity="1" />
+          <End Role="Service" Type="Self.Service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ServiceCategory">
+              <PropertyRef Name="ServiceCategoryId" />
+            </Principal>
+            <Dependent Role="Service">
+              <PropertyRef Name="ServiceCategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Service_ServiceProvider">
+          <End Role="ServiceProvider" Type="Self.ServiceProvider" Multiplicity="1" />
+          <End Role="Service" Type="Self.Service" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ServiceProvider">
+              <PropertyRef Name="ServiceProviderId" />
+            </Principal>
+            <Dependent Role="Service">
+              <PropertyRef Name="ServiceProviderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ServiceVersion_Service">
+          <End Role="Service" Type="Self.Service" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ServiceVersion" Type="Self.ServiceVersion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Service">
+              <PropertyRef Name="ServiceId" />
+            </Principal>
+            <Dependent Role="ServiceVersion">
+              <PropertyRef Name="ServiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Similar_Service">
+          <End Role="Service" Type="Self.Service" Multiplicity="1" />
+          <End Role="Similar" Type="Self.Similar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Service">
+              <PropertyRef Name="ServiceId" />
+            </Principal>
+            <Dependent Role="Similar">
+              <PropertyRef Name="ServiceId1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Similar_Service1">
+          <End Role="Service" Type="Self.Service" Multiplicity="1" />
+          <End Role="Similar" Type="Self.Similar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Service">
+              <PropertyRef Name="ServiceId" />
+            </Principal>
+            <Dependent Role="Similar">
+              <PropertyRef Name="ServiceId2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ServiceCategory_ServiceCategory">
+          <End Role="ServiceCategory" Type="Self.ServiceCategory" Multiplicity="0..1" />
+          <End Role="ServiceCategory1" Type="Self.ServiceCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ServiceCategory">
+              <PropertyRef Name="ServiceCategoryId" />
+            </Principal>
+            <Dependent Role="ServiceCategory1">
+              <PropertyRef Name="ServiceCategoryParent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ServiceLog_ServiceVersion">
+          <End Role="ServiceVersion" Type="Self.ServiceVersion" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ServiceLog" Type="Self.ServiceLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ServiceVersion">
+              <PropertyRef Name="ServiceVersionId" />
+            </Principal>
+            <Dependent Role="ServiceLog">
+              <PropertyRef Name="ServiceVersionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Workflow_ServiceVersion">
+          <End Role="ServiceVersion" Type="Self.ServiceVersion" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Workflow" Type="Self.Workflow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ServiceVersion">
+              <PropertyRef Name="ServiceVersionId" />
+            </Principal>
+            <Dependent Role="Workflow">
+              <PropertyRef Name="ServiceVersionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="EnterpriseApplications" EntityType="Self.EnterpriseApplication" />
+          <EntitySet Name="Operations" EntityType="Self.Operation" />
+          <EntitySet Name="Services" EntityType="Self.Service" />
+          <EntitySet Name="ServiceCategories" EntityType="Self.ServiceCategory" />
+          <EntitySet Name="ServiceLogs" EntityType="Self.ServiceLog" />
+          <EntitySet Name="ServiceProviders" EntityType="Self.ServiceProvider" />
+          <EntitySet Name="ServiceVersions" EntityType="Self.ServiceVersion" />
+          <EntitySet Name="Similars" EntityType="Self.Similar" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="Workflows" EntityType="Self.Workflow" />
+          <AssociationSet Name="FK_Workflow_EnterpriseApplication" Association="Self.FK_Workflow_EnterpriseApplication">
+            <End Role="EnterpriseApplication" EntitySet="EnterpriseApplications" />
+            <End Role="Workflow" EntitySet="Workflows" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Operation_ServiceVersion" Association="Self.FK_Operation_ServiceVersion">
+            <End Role="ServiceVersion" EntitySet="ServiceVersions" />
+            <End Role="Operation" EntitySet="Operations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Service_ServiceCategory" Association="Self.FK_Service_ServiceCategory">
+            <End Role="ServiceCategory" EntitySet="ServiceCategories" />
+            <End Role="Service" EntitySet="Services" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Service_ServiceProvider" Association="Self.FK_Service_ServiceProvider">
+            <End Role="ServiceProvider" EntitySet="ServiceProviders" />
+            <End Role="Service" EntitySet="Services" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ServiceVersion_Service" Association="Self.FK_ServiceVersion_Service">
+            <End Role="Service" EntitySet="Services" />
+            <End Role="ServiceVersion" EntitySet="ServiceVersions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Similar_Service" Association="Self.FK_Similar_Service">
+            <End Role="Service" EntitySet="Services" />
+            <End Role="Similar" EntitySet="Similars" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Similar_Service1" Association="Self.FK_Similar_Service1">
+            <End Role="Service" EntitySet="Services" />
+            <End Role="Similar" EntitySet="Similars" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ServiceCategory_ServiceCategory" Association="Self.FK_ServiceCategory_ServiceCategory">
+            <End Role="ServiceCategory" EntitySet="ServiceCategories" />
+            <End Role="ServiceCategory1" EntitySet="ServiceCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ServiceLog_ServiceVersion" Association="Self.FK_ServiceLog_ServiceVersion">
+            <End Role="ServiceVersion" EntitySet="ServiceVersions" />
+            <End Role="ServiceLog" EntitySet="ServiceLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Workflow_ServiceVersion" Association="Self.FK_Workflow_ServiceVersion">
+            <End Role="ServiceVersion" EntitySet="ServiceVersions" />
+            <End Role="Workflow" EntitySet="Workflows" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CloudRepositoryModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="EnterpriseApplications">
+            <EntityTypeMapping TypeName="CloudRepositoryModel.EnterpriseApplication">
+              <MappingFragment StoreEntitySet="EnterpriseApplication">
+                <ScalarProperty Name="EnterpriseApplicationId" ColumnName="EnterpriseApplicationId" />
+                <ScalarProperty Name="ApplicationName" ColumnName="ApplicationName" />
+                <ScalarProperty Name="Specifications" ColumnName="Specifications" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Operations">
+            <EntityTypeMapping TypeName="CloudRepositoryModel.Operation">
+              <MappingFragment StoreEntitySet="Operation">
+                <ScalarProperty Name="OperationId" ColumnName="OperationId" />
+                <ScalarProperty Name="ServiceVersionId" ColumnName="ServiceVersionId" />
+                <ScalarProperty Name="OperationName" ColumnName="OperationName" />
+                <ScalarProperty Name="ServiceParameter" ColumnName="ServiceParameter" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Services">
+            <EntityTypeMapping TypeName="CloudRepositoryModel.Service">
+              <MappingFragment StoreEntitySet="Service">
+                <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+                <ScalarProperty Name="ServiceProviderId" ColumnName="ServiceProviderId" />
+                <ScalarProperty Name="ServiceCategoryId" ColumnName="ServiceCategoryId" />
+                <ScalarProperty Name="ServiceName" ColumnName="ServiceName" />
+                <ScalarProperty Name="ServiceDescription" ColumnName="ServiceDescription" />
+                <ScalarProperty Name="SLA" ColumnName="SLA" />
+                <ScalarProperty Name="SupportUrl" ColumnName="SupportUrl" />
+                <ScalarProperty Name="ServiceCost" ColumnName="ServiceCost" />
+                <ScalarProperty Name="ServiceSecurity" ColumnName="ServiceSecurity" />
+                <ScalarProperty Name="ServiceStatus" ColumnName="ServiceStatus" />
+                <ScalarProperty Name="ServiceType" ColumnName="ServiceType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ServiceCategories">
+            <EntityTypeMapping TypeName="CloudRepositoryModel.ServiceCategory">
+              <MappingFragment StoreEntitySet="ServiceCategory">
+                <ScalarProperty Name="ServiceCategoryId" ColumnName="ServiceCategoryId" />
+                <ScalarProperty Name="ServiceCategoryParent" ColumnName="ServiceCategoryParent" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ServiceLogs">
+            <EntityTypeMapping TypeName="CloudRepositoryModel.ServiceLog">
+              <MappingFragment StoreEntitySet="ServiceLog">
+                <ScalarProperty Name="ServiceLogId" ColumnName="ServiceLogId" />
+                <ScalarProperty Name="ServiceVersionId" ColumnName="ServiceVersionId" />
+                <ScalarProperty Name="ExecutionStartTime" ColumnName="ExecutionStartTime" />
+                <ScalarProperty Name="ExecutionEndTime" ColumnName="ExecutionEndTime" />
+                <ScalarProperty Name="LogMessage" ColumnName="LogMessage" />
+                <ScalarProperty Name="AuditStatus" ColumnName="AuditStatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ServiceProviders">
+            <EntityTypeMapping TypeName="CloudRepositoryModel.ServiceProvider">
+              <MappingFragment StoreEntitySet="ServiceProvider">
+                <ScalarProperty Name="ServiceProviderId" ColumnName="ServiceProviderId" />
+                <ScalarProperty Name="ProviderName" ColumnName="ProviderName" />
+                <ScalarProperty Name="Website" ColumnName="Website" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="SupportEmail" ColumnName="SupportEmail" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ServiceVersions">
+            <EntityTypeMapping TypeName="CloudRepositoryModel.ServiceVersion">
+              <MappingFragment StoreEntitySet="ServiceVersion">
+                <ScalarProperty Name="ServiceVersionId" ColumnName="ServiceVersionId" />
+                <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+                <ScalarProperty Name="Version" ColumnName="Version" />
+                <ScalarProperty Name="EndpointUrl" ColumnName="EndpointUrl" />
+                <ScalarProperty Name="WSDL" ColumnName="WSDL" />
+                <ScalarProperty Name="Availability" ColumnName="Availability" />
+                <ScalarProperty Name="ResponseTime" ColumnName="ResponseTime" />
+                <ScalarProperty Name="AdaptorURL" ColumnName="AdaptorURL" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Similars">
+            <EntityTypeMapping TypeName="CloudRepositoryModel.Similar">
+              <MappingFragment StoreEntitySet="Similar">
+                <ScalarProperty Name="SimilarId" ColumnName="SimilarId" />
+                <ScalarProperty Name="ServiceId1" ColumnName="ServiceId1" />
+                <ScalarProperty Name="ServiceId2" ColumnName="ServiceId2" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="CloudRepositoryModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Workflows">
+            <EntityTypeMapping TypeName="CloudRepositoryModel.Workflow">
+              <MappingFragment StoreEntitySet="Workflow">
+                <ScalarProperty Name="WorkflowId" ColumnName="WorkflowId" />
+                <ScalarProperty Name="ServiceVersionId" ColumnName="ServiceVersionId" />
+                <ScalarProperty Name="EnterpriseApplicationId" ColumnName="EnterpriseApplicationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

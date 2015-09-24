@@ -1,0 +1,335 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cool Off-canvas Burger Menu Demo</title>
+    @Scripts.Render("~/bundles/jquery")
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            background: #f7f7f7;
+            font-size: 16px;
+            line-height: 1.5;
+            font-family: 'roboto', sans-serif;
+            color: #333;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        #site-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        main {
+            *zoom: 1;
+            width: auto;
+            max-width: 1200px;
+            float: none;
+            display: block;
+            margin-right: auto;
+            margin-left: auto;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-top: 20px;
+        }
+
+            main:before, main:after {
+                content: '';
+                display: table;
+            }
+
+            main:after {
+                clear: both;
+            }
+
+        /* Navbar Menu Component */
+
+        .menu {
+            width: 300px;
+            height: 100%;
+            background: #333;
+            position: fixed;
+            top: 50px;
+            left: -300px;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            overflow: hidden;
+            -webkit-transform: translateX(0);
+            -ms-transform: translateX(0);
+            transform: translateX(0);
+            -webkit-transform: translateX(0) translateZ(0);
+            transform: translateX(0) translateZ(0);
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+            -webkit-transition: all 0.3s cubic-bezier(0.32, 1.25, 0.375, 1.15);
+            transition: all 0.3s cubic-bezier(0.32, 1.25, 0.375, 1.15);
+            z-index: 10;
+        }
+
+            .menu.show-nav {
+                -webkit-transform: translateX(300px);
+                -ms-transform: translateX(300px);
+                transform: translateX(300px);
+                -webkit-transform: translateX(300px) tranlateZ(0);
+                -ms-transform: translateX(300px) tranlateZ(0);
+                transform: translateX(300px) tranlateZ(0);
+                -webkit-transform: translate3d(300px, 0, 0);
+                transform: translate3d(300px, 0, 0);
+            }
+
+            .menu ul {
+                margin: 0;
+                padding: 0;
+            }
+
+                .menu ul li {
+                    position: relative;
+                    list-style: none;
+                    width: 80%;
+                    margin: 0 auto;
+                    padding: 20px 10px;
+                    text-align: center;
+                    border-top: 1px solid #333;
+                    box-shadow: 0 -1px 1px -1px #746559;
+                }
+
+                    .menu ul li:first-child {
+                        margin-top: 20px;
+                        border: 0;
+                        box-shadow: none;
+                    }
+
+                    .menu ul li a {
+                        position: relative;
+                        font-weight: 300;
+                        padding: 8px 10px;
+                        color: rgba(255, 255, 255, 0.7);
+                        color: white;
+                        text-decoration: none;
+                        text-transform: uppercase;
+                        -webkit-transition: all 0.25s ease-in-out;
+                        transition: all 0.25s ease-in-out;
+                    }
+
+                        .menu ul li a:after {
+                            content: "";
+                            position: absolute;
+                            bottom: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 1px;
+                            background-color: #f38b00;
+                            visibility: hidden;
+                            -webkit-transform: scaleX(0);
+                            -ms-transform: scaleX(0);
+                            transform: scaleX(0);
+                            -webkit-transition: all 0.3s cubic-bezier(0.32, 1.25, 0.375, 1.15);
+                            transition: all 0.3s cubic-bezier(0.32, 1.25, 0.375, 1.15);
+                        }
+
+        .no-touch .menu ul li a:hover:after {
+            -webkit-transform: scale(1);
+            -ms-transform: scale(1);
+            transform: scale(1);
+            visibility: visible;
+        }
+
+        .menu p {
+            color: rgba(255, 255, 255, 0.7);
+            position: absolute;
+            top: 86%;
+            left: 20px;
+            font-size: 0.875em;
+            text-align: center;
+        }
+
+            .menu p a {
+                color: rgba(243, 139, 0, 0.6);
+                text-decoration: none;
+                -webkit-transition: all 0.3s ease;
+                transition: all 0.3s ease;
+            }
+
+                .menu p a:hover {
+                    color: #f38b00;
+                    text-decoration: underline;
+                }
+
+        .nav-toggle {
+            position: fixed;
+            top: 50px;
+            left: 30px;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            -webkit-transform: translateX(0);
+            -ms-transform: translateX(0);
+            transform: translateX(0);
+            -webkit-transform: translateX(0) translateZ(0);
+            transform: translateX(0) translateZ(0);
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+            -webkit-transition: all 0.4s cubic-bezier(0.32, 1.25, 0.375, 1.15);
+            transition: all 0.4s cubic-bezier(0.32, 1.25, 0.375, 1.15);
+            z-index: 11;
+        }
+
+            .nav-toggle span {
+                color: #4c4c4c;
+                color: rgba(0, 0, 0, 0.7);
+                padding: 5px;
+                font-size: 1.875em;
+            }
+
+        .no-touch .nav-toggle span:hover {
+            color: black;
+        }
+
+        .nav-toggle span.fa-times {
+            color: #fff;
+        }
+
+            .nav-toggle span.fa-times:hover {
+                color: #fff;
+            }
+
+        .nav-toggle.show-nav {
+            top: 50px;
+            left: 12px;
+        }
+
+        /*Search Box clear button*/
+        #searchinput {
+            width: 200px;
+        }
+
+        #searchclear {
+            position: absolute;
+            right: 5px;
+            top: 0;
+            bottom: 0;
+            height: 14px;
+            margin: auto;
+            font-size: 14px;
+            cursor: pointer;
+            color: #ccc;
+        }
+    </style>
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#searchinput").keyup(function () {
+                $("#searchclear").toggle(Boolean($(this).val()));
+            });
+            $("#searchclear").toggle(Boolean($("#searchinput").val()));
+            $("#searchclear").click(function () {
+                $("#searchinput").val('').focus();
+                $(this).hide();
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div id="site-wrapper">
+        <nav class="menu" role="navigation">
+            <ul>
+                <li>@Html.ActionLink("Enterprise Applications", "Index", "EnterpriseApplications")</li>
+                <li>@Html.ActionLink("Operations", "Index", "Operations")</li>
+                <li>@Html.ActionLink("Service Categories", "Index", "ServiceCategories")</li>
+                <li>@Html.ActionLink("Service Logs", "Index", "ServiceLogs")</li>
+                <li>@Html.ActionLink("Service Providers", "Index", "ServiceProviders")</li>
+                <li>@Html.ActionLink("Services", "Index", "Services")</li>
+                <li>@Html.ActionLink("Service Versions", "Index", "ServiceVersions")</li>
+            </ul>
+        </nav>
+        <a href="#" class="nav-toggle"><span class="fa fa-bars"></span></a>
+    </div>
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script>
+        // Vars
+
+        var wrapper = $("#site-wrapper"),
+            menu = $(".menu"),
+            menuLinks = $(".menu ul li a"),
+            toggle = $(".nav-toggle"),
+            toggleIcon = $(".nav-toggle span");
+
+        function toggleThatNav() {
+            if (menu.hasClass("show-nav")) {
+                if (!Modernizr.csstransforms) {
+                    menu.removeClass("show-nav");
+                    toggle.removeClass("show-nav");
+                    menu.animate({
+                        left: "+=300"
+                    }, 500);
+                    toggle.animate({
+                        left: "+=300"
+                    }, 500);
+                } else {
+                    menu.removeClass("show-nav");
+                    toggle.removeClass("show-nav");
+                }
+
+            } else {
+                if (!Modernizr.csstransforms) {
+                    menu.addClass("show-nav");
+                    toggle.addClass("show-nav");
+                    menu.css("left", "0px");
+                    toggle.css("left", "330px");
+                } else {
+                    menu.addClass("show-nav");
+                    toggle.addClass("show-nav");
+                }
+            }
+        }
+
+        function changeToggleClass() {
+            toggleIcon.toggleClass("fa-times");
+            toggleIcon.toggleClass("fa-bars");
+        }
+
+        $(function () {
+            toggle.on("click", function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+                toggleThatNav();
+                changeToggleClass();
+            });
+            // Keyboard Esc event support
+            $(document).keyup(function (e) {
+                if (e.keyCode == 27) {
+                    if (menu.hasClass("show-nav")) {
+                        if (!Modernizr.csstransforms) {
+                            menu.removeClass("show-nav");
+                            toggle.removeClass("show-nav");
+                            menu.css("left", "-300px");
+                            toggle.css("left", "30px");
+                            changeToggleClass();
+                        } else {
+                            menu.removeClass("show-nav");
+                            toggle.removeClass("show-nav");
+                            changeToggleClass();
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

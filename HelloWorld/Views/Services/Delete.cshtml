@@ -1,0 +1,105 @@
+﻿@model HelloWorld.Models.ViewModels.ServiceVM
+
+@{
+    ViewBag.Title = "Delete";
+    ViewBag.Sidemenu = true;
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Service</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceDescription)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SLA)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SLA)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SupportUrl)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SupportUrl)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceCost)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceCost)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceSecurity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceSecurity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceCategory.CategoryName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceCategory.CategoryName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceProvider.ProviderName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceProvider.ProviderName)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

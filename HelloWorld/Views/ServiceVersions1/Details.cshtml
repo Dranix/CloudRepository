@@ -1,0 +1,74 @@
+﻿@model HelloWorld.Models.ServiceVersion
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ServiceVersion</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Service.ServiceName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Service.ServiceName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Version)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Version)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EndpointUrl)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EndpointUrl)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WSDL)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WSDL)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Availability)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Availability)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ResponseTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ResponseTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AdaptorURL)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AdaptorURL)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ServiceVersionId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
