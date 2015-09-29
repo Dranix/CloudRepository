@@ -9,21 +9,6 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $('.too-long').popover();
-
-
-
-        $('.too-long').click(function (e) {
-            $('.popover-title').append('<button id="popovercloseid" type="button" class="close">&times;</button>');
-            $(this).popover();
-
-        });
-
-        $(document).click(function (e) {
-            if (e.target.id == "popovercloseid") {
-                $('.too-long').popover('hide');
-            }
-
-        });
     });
 </script>
 <style>
@@ -93,14 +78,14 @@
                 @Html.DisplayFor(modelItem => item.ServiceName)
             </td>
             <td>
-                <a href="#" class="btn btn-link too-long" title="Service Description" data-content='@Html.DisplayFor(modelItem => item.ServiceDescription)' data-placement="bottom" style="padding:0px;">
+                <a href="#" role="button" tabindex="0" data-toggle="popover" data-trigger="focus" class="btn btn-link too-long" title="Service Description" data-content='@Html.DisplayFor(modelItem => item.ServiceDescription)' data-placement="bottom" style="padding:0px;">
                     <p class="truncate">
                         @Html.DisplayFor(modelItem => item.ServiceDescription)
                     </p>
                 </a>
             </td>
             <td>
-                <a href="#" class="btn btn-link too-long" title="SLA" data-content='@Html.DisplayFor(modelItem => item.SLA)' data-placement="bottom" style="padding:0px;">
+                <a href="#" role="button" tabindex="0" data-toggle="popover" data-trigger="focus"  class="btn btn-link too-long" title="SLA" data-content='@Html.DisplayFor(modelItem => item.SLA)' data-placement="bottom" style="padding:0px;">
                     <p class="truncate">
                         @Html.DisplayFor(modelItem => item.SLA)
                     </p>
