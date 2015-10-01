@@ -274,7 +274,12 @@
     <Content Include="Content\metro-schemes.min.css" />
     <Content Include="Content\metro.css" />
     <Content Include="Content\metro.min.css" />
+    <Content Include="Content\MyMetro.css" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Content\Resources\1.jpg" />
+    <Content Include="Content\Resources\2.jpg" />
+    <Content Include="Content\Resources\3.jpg" />
+    <Content Include="Content\Resources\4.jpg" />
     <Content Include="Content\Resources\add.png" />
     <Content Include="Content\Resources\cross.png" />
     <Content Include="favicon.ico" />

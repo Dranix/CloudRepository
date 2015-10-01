@@ -26,6 +26,19 @@ namespace HelloWorld
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new StyleBundle("~/Content/metro").Include(
+                    //"~/Content/metro.min.css"
+                    "~/Content/MyMetro.css"
+                    ));
+
+            //"~/Content/metro-icons.min.css",
+            //        "~/Content/metro-responsive.min.css",
+            //        "~/Content/metro-rtl.min.css",
+            //        "~/Content/metro-schemes.min.css",
+
+            bundles.Add(new ScriptBundle("~/bundles/metro").Include(
+                      "~/Scripts/metro.min.js"));
         }
     }
 }
