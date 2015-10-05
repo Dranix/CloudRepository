@@ -107,6 +107,7 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ServiceType)
+                @*@Html.Raw("<img src=\"data:image/jpeg;base64," + item.ServiceLogo + "\" />");*@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ServiceCategory.CategoryName)

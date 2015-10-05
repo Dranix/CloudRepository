@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using HelloWorld.Models;
 using HelloWorld.Models.ViewModels;
 using PagedList;
+using System.Drawing;
+using System.IO;
 
 namespace HelloWorld.Controllers
 {
@@ -118,12 +120,26 @@ namespace HelloWorld.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "EnterpriseApplicationId,ApplicationName,Specifications,UsingServices")] EnterpriseApplicationVM enterpriseApplicationVM, int[] serviceVersionList)
+        public ActionResult Create([Bind(Include = "EnterpriseApplicationId,ApplicationName,Specifications,UsingServices")] EnterpriseApplicationVM enterpriseApplicationVM, int[] serviceVersionList, HttpPostedFileBase uploadImage)
         {
 
             var enterpriseApplication = AutoMapper.Mapper.Map<EnterpriseApplication>(enterpriseApplicationVM);
             if (ModelState.IsValid)
             {
+                byte[] imageData = null;
+
+                if (uploadImage.ContentLength > 0)
+                {
+                    using (var binaryReader = new BinaryReader(uploadImage.InputStream))
+                    {
+                        imageData = binaryReader.ReadBytes(uploadImage.ContentLength);
+                        Image image = (Bitmap)((new ImageConverter()).ConvertFrom(imageData));
+                        Image resizeImage = Helper.ResizeImage(image, 480, 480);
+                        imageData = (byte[])((new ImageConverter()).ConvertTo(resizeImage, typeof(byte[])));
+                    }
+                }
+                enterpriseApplication.ApplicationLogo = imageData;
+
                 db.EnterpriseApplications.Add(enterpriseApplication);
                 int insertedRecord = db.SaveChanges();
 
@@ -172,12 +188,26 @@ namespace HelloWorld.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EnterpriseApplicationId,ApplicationName,Specifications,UsingServices")] EnterpriseApplicationVM enterpriseApplicationVM, int[] serviceVersionList)
+        public ActionResult Edit([Bind(Include = "EnterpriseApplicationId,ApplicationName,Specifications,UsingServices")] EnterpriseApplicationVM enterpriseApplicationVM, int[] serviceVersionList, HttpPostedFileBase uploadImage)
         {
             var enterpriseApplication = AutoMapper.Mapper.Map<EnterpriseApplication>(enterpriseApplicationVM);
 
             if (ModelState.IsValid)
             {
+                byte[] imageData = null;
+
+                if (uploadImage.ContentLength > 0)
+                {
+                    using (var binaryReader = new BinaryReader(uploadImage.InputStream))
+                    {
+                        imageData = binaryReader.ReadBytes(uploadImage.ContentLength);
+                        Image image = (Bitmap)((new ImageConverter()).ConvertFrom(imageData));
+                        Image resizeImage = Helper.ResizeImage(image, 480, 480);
+                        imageData = (byte[])((new ImageConverter()).ConvertTo(resizeImage, typeof(byte[])));
+                    }
+                }
+                enterpriseApplication.ApplicationLogo = imageData;
+
                 db.Entry(enterpriseApplication).State = System.Data.Entity.EntityState.Modified;
                 int insertedRecord = db.SaveChanges();
 

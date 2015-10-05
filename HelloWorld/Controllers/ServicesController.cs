@@ -7,6 +7,9 @@ using HelloWorld.Models;
 using HelloWorld.Models.ViewModels;
 using PagedList;
 using System;
+using System.Web;
+using System.IO;
+using System.Drawing;
 
 namespace HelloWorld.Controllers
 {
@@ -180,12 +183,26 @@ namespace HelloWorld.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ServiceId,ServiceProviderId,ServiceCategoryId,ServiceName,ServiceDescription,SLA,SupportUrl,ServiceCost,ServiceSecurity,ServiceStatus,ServiceType")] ServiceVM serviceVM)
+        public ActionResult Create([Bind(Include = "ServiceId,ServiceProviderId,ServiceCategoryId,ServiceName,ServiceDescription,SLA,SupportUrl,ServiceCost,ServiceSecurity,ServiceStatus,ServiceType")] ServiceVM serviceVM, HttpPostedFileBase uploadImage)
         {
             var service = AutoMapper.Mapper.Map<Service>(serviceVM);
 
             if (ModelState.IsValid)
             {
+                byte[] imageData = null;
+
+                if (uploadImage.ContentLength > 0)
+                {
+                    using (var binaryReader = new BinaryReader(uploadImage.InputStream))
+                    {
+                        imageData = binaryReader.ReadBytes(uploadImage.ContentLength);
+                        Image image = (Bitmap)((new ImageConverter()).ConvertFrom(imageData));
+                        Image resizeImage = Helper.ResizeImage(image, 480, 480);
+                        imageData = (byte[])((new ImageConverter()).ConvertTo(resizeImage, typeof(byte[])));
+                    }
+                }
+
+                service.ServiceLogo = imageData;
                 db.Services.Add(service);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -197,6 +214,15 @@ namespace HelloWorld.Controllers
             ViewBag.ServiceProviderId = new SelectList(db.ServiceProviders, "ServiceProviderId", "ProviderName", service.ServiceProviderId);
 
             return View(serviceVM);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public ActionResult ViewImage(int id)
+        {
+            var item = db.Services.Where(x => x.ServiceId == id).First();
+            byte[] buffer = item.ServiceLogo;
+            return File(buffer, "image/jpg", string.Format("{0}.jpg", id));
         }
 
         // GET: Services/Edit/5
@@ -225,10 +251,24 @@ namespace HelloWorld.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ServiceId,ServiceProviderId,ServiceCategoryId,ServiceName,ServiceDescription,SLA,SupportUrl,ServiceCost,ServiceSecurity,ServiceStatus,ServiceType")] Service service)
+        public ActionResult Edit([Bind(Include = "ServiceId,ServiceProviderId,ServiceCategoryId,ServiceName,ServiceDescription,SLA,SupportUrl,ServiceCost,ServiceSecurity,ServiceStatus,ServiceType")] Service service, HttpPostedFileBase uploadImage)
         {
             if (ModelState.IsValid)
             {
+                byte[] imageData = null;
+
+                if (uploadImage.ContentLength > 0)
+                {
+                    using (var binaryReader = new BinaryReader(uploadImage.InputStream))
+                    {
+                        imageData = binaryReader.ReadBytes(uploadImage.ContentLength);
+                        Image image = (Bitmap)((new ImageConverter()).ConvertFrom(imageData));
+                        Image resizeImage = Helper.ResizeImage(image, 480, 480);
+                        imageData = (byte[])((new ImageConverter()).ConvertTo(resizeImage, typeof(byte[])));
+                    }
+                }
+
+                service.ServiceLogo = imageData;
                 db.Entry(service).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

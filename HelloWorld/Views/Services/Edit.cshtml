@@ -8,7 +8,7 @@
 <h2>Edit</h2>
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Edit", "Services", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     
@@ -95,6 +95,15 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.ServiceType, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.ServiceType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ServiceLogo, htmlAttributes: new { @class = "control-label col-md-2" })
+            
+            <div class="col-md-10">
+                @Html.Raw("<img src=\"data:image/jpeg;base64," + Model.ServiceLogo + "\" style=\"width:128px;height:128px;\" />")
+                <input type="file" name="uploadImage" class="btn btn-default" accept="image/*" />
             </div>
         </div>
 

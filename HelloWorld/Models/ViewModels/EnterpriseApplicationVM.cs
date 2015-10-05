@@ -19,6 +19,8 @@ namespace HelloWorld.Models.ViewModels
         [Display(Name = "Using Services")]
         public ICollection<Tuple<int,string>> UsingServices { get; set; }
 
+        public string ApplicationLogo { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Workflow> Workflows { get; set; }
     }

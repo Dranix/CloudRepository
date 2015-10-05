@@ -5,10 +5,8 @@
     ViewBag.Sidemenu = true;
 }
 
-<h2>Details</h2>
-
 <div>
-    <h4>Enterprise Application</h4>
+    @Html.Raw("<img src=\"data:image/jpeg;base64," + Model.ApplicationLogo + "\" style=\"width:128px;height:128px;\" />")
     <hr />
     <dl class="dl-horizontal">
         <dt>

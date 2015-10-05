@@ -23,6 +23,7 @@ namespace HelloWorld.Models
         public int EnterpriseApplicationId { get; set; }
         public string ApplicationName { get; set; }
         public string Specifications { get; set; }
+        public byte[] ApplicationLogo { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Workflow> Workflows { get; set; }

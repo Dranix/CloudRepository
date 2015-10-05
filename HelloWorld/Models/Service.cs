@@ -33,6 +33,7 @@ namespace HelloWorld.Models
         public string ServiceSecurity { get; set; }
         public string ServiceStatus { get; set; }
         public string ServiceType { get; set; }
+        public byte[] ServiceLogo { get; set; }
     
         public virtual ServiceCategory ServiceCategory { get; set; }
         public virtual ServiceProvider ServiceProvider { get; set; }

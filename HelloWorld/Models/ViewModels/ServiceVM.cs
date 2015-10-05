@@ -37,6 +37,7 @@ namespace HelloWorld.Models.ViewModels
         public string ServiceStatus { get; set; }
         [Display(Name = "Service Type")]
         public string ServiceType { get; set; }
+        public string ServiceLogo { get; set; }
 
         public virtual ServiceCategory ServiceCategory { get; set; }
         public virtual ServiceProvider ServiceProvider { get; set; }

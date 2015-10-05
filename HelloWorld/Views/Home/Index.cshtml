@@ -1,4 +1,6 @@
-﻿@{
+﻿@model HelloWorld.Models.ViewModels.HomeVM
+
+@{
     ViewBag.Title = "Home Page";
 }
 <!DOCTYPE html>
@@ -18,66 +20,28 @@
         <hr />
         <div class="row cells3">
             <div class="cell">
-                <span class="tile-label" style="color:white;">Label</span>
+                <span class="tile-label" style="color:white;">@Model.ApplicationCount Services In Repository And Counting</span>
                 <div class="tile-large">
                     <div class="tile-content">
                         <div class="carousel" data-role="carousel" data-control-next=" " data-control-prev=" ">
-                            <div class="slide">
-                                <div class="tile-large" style="margin:0px;">
-                                    <div class="tile-content">
-                                        <div class="image-container">
-                                            <div class="frame">
-                                                987987<img src=" ~/Content/Resources/4.jpg">
-                                            </div>
-                                            <div class="image-overlay">
-                                                Overlay text
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="slide">
-                                <div class="tile-large" style="margin:0px;">
-                                    <div class="tile-content">
-                                        <div class="image-container">
-                                            <div class="frame">
-                                                <img src=" ~/Content/Resources/1.jpg">
-                                            </div>
-                                            <div class="image-overlay">
-                                                Overlay text
+                            @foreach (var item in Model.ServiceList)
+                            {
+                                <div class="slide" onclick="location.href='@Url.Action("Details", "Services", new { id = item.ServiceId })'">
+                                    <div class="tile-large" style="margin:0px;">
+                                        <div class="tile-content">
+                                            <div class="image-container">
+                                                <div class="frame">
+                                                    @Html.Raw("<img src=\"data:image/jpeg;base64," + item.ServiceLogo + "\" />");
+                                                </div>
+                                                <div class="image-overlay">
+                                                    <h3>@item.ServiceName</h3>
+                                                    <h5>@item.ServiceDescription</h5>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="slide">
-                                <div class="tile-large" style="margin:0px;">
-                                    <div class="tile-content">
-                                        <div class="image-container">
-                                            <div class="frame">
-                                                <img src=" ~/Content/Resources/2.jpg">
-                                            </div>
-                                            <div class="image-overlay">
-                                                Overlay text
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="slide">
-                                <div class="tile-large" style="margin:0px;">
-                                    <div class="tile-content">
-                                        <div class="image-container">
-                                            <div class="frame">
-                                                <img src=" ~/Content/Resources/3.jpg">
-                                            </div>
-                                            <div class="image-overlay">
-                                                Overlay text
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -87,62 +51,27 @@
                 <div class="tile-large">
                     <div class="tile-content">
                         <div class="carousel" data-role="carousel" data-control-next=" " data-control-prev=" ">
-                            <div class="slide">
-                                <div class="tile-large" style="margin:0px;">
-                                    <div class="tile-content">
-                                        <div class="image-container">
-                                            <div class="frame">
-                                                987987<img src=" ~/Content/Resources/4.jpg">
-                                            </div>
-                                            <div class="image-overlay">
-                                                Overlay text
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="slide">
-                                <div class="tile-large" style="margin:0px;">
-                                    <div class="tile-content">
-                                        <div class="image-container">
-                                            <div class="frame">
-                                                <img src=" ~/Content/Resources/1.jpg">
-                                            </div>
-                                            <div class="image-overlay">
-                                                Overlay text
+                            @foreach (var item in Model.ApplicationList)
+                            {
+                                <div class="slide" onclick="location.href='@Url.Action("Details", "EnterpriseApplications", new { id = item.EnterpriseApplicationId })'">
+                                    <div class="tile-large" style="margin:0px;">
+                                        <div class="tile-content">
+                                            <div class="image-container">
+                                                <div class="frame">
+                                                    @Html.Raw("<img src=\"data:image/jpeg;base64," + item.ApplicationLogo + "\" />");
+                                                </div>
+                                                <div class="image-overlay">
+                                                    <h3>@item.ApplicationName</h3>
+                                                    @foreach (var sv in item.UsingServices)
+                                                    {
+                                                        <h5>@sv.Item2</h5>
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="slide">
-                                <div class="tile-large" style="margin:0px;">
-                                    <div class="tile-content">
-                                        <div class="image-container">
-                                            <div class="frame">
-                                                <img src=" ~/Content/Resources/2.jpg">
-                                            </div>
-                                            <div class="image-overlay">
-                                                Overlay text
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="slide">
-                                <div class="tile-large" style="margin:0px;">
-                                    <div class="tile-content">
-                                        <div class="image-container">
-                                            <div class="frame">
-                                                <img src=" ~/Content/Resources/3.jpg">
-                                            </div>
-                                            <div class="image-overlay">
-                                                Overlay text
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -152,62 +81,21 @@
                 <div class="tile-large">
                     <div class="tile-content">
                         <div class="carousel" data-role="carousel" data-control-next=" " data-control-prev=" ">
-                            <div class="slide">
-                                <div class="tile-large" style="margin:0px;">
-                                    <div class="tile-content">
-                                        <div class="image-container">
-                                            <div class="frame">
-                                                987987<img src=" ~/Content/Resources/4.jpg">
-                                            </div>
-                                            <div class="image-overlay">
-                                                Overlay text
-                                            </div>
+                            @foreach (var item in Model.CategoryList)
+                            {
+                                <div class="slide" onclick="location.href='@Url.Action("Details", "ServiceCategories", new { id = item.ServiceCategoryId })'">
+                                    <div class="tile-large" style="margin:0px;">
+                                        <div class="tile-content">
+                                            <h3 style="text-align:center;">@item.CategoryName</h3>
+                                            <hr style="color:black;"/>
+                                            @foreach (var sv in item.Services)
+                                            {
+                                                <h5 style="text-align:center;">@sv.ServiceName</h5>
+                                            }
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="slide">
-                                <div class="tile-large" style="margin:0px;">
-                                    <div class="tile-content">
-                                        <div class="image-container">
-                                            <div class="frame">
-                                                <img src=" ~/Content/Resources/1.jpg">
-                                            </div>
-                                            <div class="image-overlay">
-                                                Overlay text
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="slide">
-                                <div class="tile-large" style="margin:0px;">
-                                    <div class="tile-content">
-                                        <div class="image-container">
-                                            <div class="frame">
-                                                <img src=" ~/Content/Resources/2.jpg">
-                                            </div>
-                                            <div class="image-overlay">
-                                                Overlay text
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="slide">
-                                <div class="tile-large" style="margin:0px;">
-                                    <div class="tile-content">
-                                        <div class="image-container">
-                                            <div class="frame">
-                                                <img src=" ~/Content/Resources/3.jpg">
-                                            </div>
-                                            <div class="image-overlay">
-                                                Overlay text
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -234,5 +122,3 @@
     </div>
 </body>
 </html>
-
-

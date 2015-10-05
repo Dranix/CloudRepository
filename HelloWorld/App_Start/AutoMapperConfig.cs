@@ -2,9 +2,9 @@
 using HelloWorld.Models;
 using HelloWorld.Models.ViewModels;
 using System.Collections.Generic;
-using System.Linq;
 using System;
 using System.Collections.ObjectModel;
+using System.Drawing;
 
 namespace HelloWorld.App_Start
 {
@@ -16,7 +16,8 @@ namespace HelloWorld.App_Start
 
             Mapper.CreateMap<ServiceProviderVM, ServiceProvider>().ReverseMap();
 
-            Mapper.CreateMap<ServiceVM, Service>().ReverseMap();
+            Mapper.CreateMap<Service, ServiceVM>()
+                .ForMember(dest => dest.ServiceLogo, op => op.ResolveUsing<ToServiceLogo>().FromMember(x => x.ServiceLogo)).ReverseMap();
 
             Mapper.CreateMap<OperationVM, Operation>().ReverseMap();
 
@@ -25,10 +26,9 @@ namespace HelloWorld.App_Start
 
             Mapper.CreateMap<ServiceLogVM, ServiceLog>().ReverseMap();
 
-            Mapper.CreateMap<EnterpriseApplication, EnterpriseApplicationVM>().
-                ForMember(dest => dest.UsingServices, op =>
-                        op.ResolveUsing<ToUsingServices>()
-                            .FromMember(x => x.Workflows));
+            Mapper.CreateMap<EnterpriseApplication, EnterpriseApplicationVM>()
+                .ForMember(dest => dest.UsingServices, op => op.ResolveUsing<ToUsingServices>().FromMember(x => x.Workflows))
+                .ForMember(dest => dest.ApplicationLogo, op => op.ResolveUsing<ToServiceLogo>().FromMember(x => x.ApplicationLogo));
             Mapper.CreateMap<EnterpriseApplicationVM, EnterpriseApplication>();
 
             Mapper.CreateMap<ParameterVM, Parameter>().ReverseMap();
@@ -47,6 +47,23 @@ namespace HelloWorld.App_Start
             }
 
             return result;
+        }
+    }
+
+    public class ToServiceLogo : ValueResolver<byte[], string>
+    {
+        protected override string ResolveCore(byte[] source)
+        {
+            if (source == null)
+            {
+                Bitmap image = new Bitmap(Resources.Resources.NoImage);
+                byte[] imageByte = (byte[])((new ImageConverter()).ConvertTo(image, typeof(byte[])));
+                return Convert.ToBase64String(imageByte);
+            }
+            else
+            {
+                return Convert.ToBase64String(source);
+            }
         }
     }
 }

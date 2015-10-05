@@ -12,6 +12,7 @@
           <Property Name="EnterpriseApplicationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ApplicationName" Type="varchar(max)" />
           <Property Name="Specifications" Type="varchar(max)" />
+          <Property Name="ApplicationLogo" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="Operation">
           <Key>
@@ -46,6 +47,7 @@
           <Property Name="ServiceSecurity" Type="varchar(max)" />
           <Property Name="ServiceStatus" Type="varchar(max)" />
           <Property Name="ServiceType" Type="varchar(max)" />
+          <Property Name="ServiceLogo" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="ServiceCategory">
           <Key>
@@ -328,6 +330,7 @@
           <Property Name="ApplicationName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Specifications" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Workflows" Relationship="Self.FK_Workflow_EnterpriseApplication" FromRole="EnterpriseApplication" ToRole="Workflow" />
+          <Property Name="ApplicationLogo" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityType Name="Operation">
           <Key>
@@ -359,6 +362,7 @@
           <NavigationProperty Name="ServiceVersions" Relationship="Self.FK_ServiceVersion_Service" FromRole="Service" ToRole="ServiceVersion" />
           <NavigationProperty Name="Similars" Relationship="Self.FK_Similar_Service" FromRole="Service" ToRole="Similar" />
           <NavigationProperty Name="Similars1" Relationship="Self.FK_Similar_Service1" FromRole="Service" ToRole="Similar" />
+          <Property Name="ServiceLogo" Type="Binary" Nullable="true" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityType Name="ServiceCategory">
           <Key>
@@ -662,6 +666,7 @@
           <EntitySetMapping Name="EnterpriseApplications">
             <EntityTypeMapping TypeName="CloudRepositoryModel.EnterpriseApplication">
               <MappingFragment StoreEntitySet="EnterpriseApplication">
+                <ScalarProperty Name="ApplicationLogo" ColumnName="ApplicationLogo" />
                 <ScalarProperty Name="EnterpriseApplicationId" ColumnName="EnterpriseApplicationId" />
                 <ScalarProperty Name="ApplicationName" ColumnName="ApplicationName" />
                 <ScalarProperty Name="Specifications" ColumnName="Specifications" />
@@ -680,6 +685,7 @@
           <EntitySetMapping Name="Services">
             <EntityTypeMapping TypeName="CloudRepositoryModel.Service">
               <MappingFragment StoreEntitySet="Service">
+                <ScalarProperty Name="ServiceLogo" ColumnName="ServiceLogo" />
                 <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
                 <ScalarProperty Name="ServiceProviderId" ColumnName="ServiceProviderId" />
                 <ScalarProperty Name="ServiceCategoryId" ColumnName="ServiceCategoryId" />
