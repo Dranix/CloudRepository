@@ -189,6 +189,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OperationsController.cs" />
+    <Compile Include="Controllers\OverviewController.cs" />
     <Compile Include="Controllers\ParametersController.cs" />
     <Compile Include="Controllers\ServiceCategoriesController.cs" />
     <Compile Include="Controllers\ServiceLogsController.cs" />
@@ -250,6 +251,7 @@
     <Compile Include="Models\ViewModels\EnterpriseApplicationVM.cs" />
     <Compile Include="Models\ViewModels\HomeVM.cs" />
     <Compile Include="Models\ViewModels\OperationVM.cs" />
+    <Compile Include="Models\ViewModels\OverviewVM.cs" />
     <Compile Include="Models\ViewModels\ParameterVM.cs" />
     <Compile Include="Models\ViewModels\ServiceCategoryVM.cs" />
     <Compile Include="Models\ViewModels\ServiceLogVM.cs" />
@@ -321,6 +323,8 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -414,6 +418,8 @@
     <Content Include="Views\Parameters\Details.cshtml" />
     <Content Include="Views\Parameters\Edit.cshtml" />
     <Content Include="Views\Parameters\Index.cshtml" />
+    <Content Include="Views\Overview\Index.cshtml" />
+    <Content Include="Views\Overview\ListService.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

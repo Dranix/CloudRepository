@@ -18,7 +18,7 @@ namespace HelloWorld.Models
         public ServiceCategory()
         {
             this.Services = new HashSet<Service>();
-            this.ServiceCategory1 = new HashSet<ServiceCategory>();
+            this.ChildrenCategory = new HashSet<ServiceCategory>();
         }
     
         public int ServiceCategoryId { get; set; }
@@ -28,7 +28,7 @@ namespace HelloWorld.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Service> Services { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ServiceCategory> ServiceCategory1 { get; set; }
-        public virtual ServiceCategory ServiceCategory2 { get; set; }
+        public virtual ICollection<ServiceCategory> ChildrenCategory { get; set; }
+        public virtual ServiceCategory ParentCategory { get; set; }
     }
 }

@@ -1,0 +1,108 @@
+﻿@model HelloWorld.Models.ViewModels.OverviewVM
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Sidemenu = true;
+}
+
+@functions{
+    public HtmlString PrintCategory(ICollection<HelloWorld.Models.ViewModels.ServiceCategoryVM> list, HelloWorld.Models.ViewModels.ServiceCategoryVM parent)
+    {
+
+        string result = String.Empty;
+
+        foreach (var item in list)
+        {
+            result += "<li>";
+            if (item.ChildrenCategory.Count > 0)
+            {
+                result += "<span class=\"node - toggle\"></span>";
+            }
+            if (item.ServiceCategoryParent == null && parent == null)
+            {
+                result += "<span class=\"leaf\">" + @Ajax.ActionLink(
+                        linkText: item.CategoryName
+                        , routeValues: new { categoryId = @item.ServiceCategoryId}
+                        , actionName: "ListService"
+                    , ajaxOptions: new AjaxOptions
+                    {
+                        UpdateTargetId = "ajaxtarget",
+                        InsertionMode = InsertionMode.Replace
+                    }) + "</span>";
+            }
+            else if (parent != null && parent.ChildrenCategory.Contains(item))
+            {
+                result += "<span class=\"leaf\">" + @Ajax.ActionLink(
+                        linkText: item.CategoryName
+                        , routeValues: new { categoryId = @item.ServiceCategoryId}
+                        , actionName: "ListService"
+                    , ajaxOptions: new AjaxOptions
+                    {
+                        UpdateTargetId = "ajaxtarget",
+                        InsertionMode = InsertionMode.Replace
+                    }) + "</span>";
+            }
+
+            if (item.ChildrenCategory.Count > 0)
+            {
+                if (item.ParentCategory == null)
+                {
+                    result += "<ul>";
+                    result += PrintCategory(item.ChildrenCategory, item);
+                    result += "</ul>";
+                }
+                else if (parent != null && parent.ChildrenCategory.Contains(item))
+                {
+                    result += "<ul>";
+                    result += PrintCategory(item.ChildrenCategory, item);
+                    result += "</ul>";
+                }
+            }
+            result += "</li>";
+        }
+
+        return new HtmlString(result);
+    }
+}
+<!DOCTYPE html>
+<html>
+<head>
+    @Scripts.Render("~/bundles/jquery")
+    @Styles.Render("~/Content/metro")
+    @Scripts.Render("~/bundles/metro")
+
+</head>
+<body>
+    <div>
+
+    </div>
+
+    
+    <table>
+        <tr>
+            <td align="right" colspan="2">@using (Ajax.BeginForm(actionName: "ListService",
+                    controllerName: "Overview",
+                    ajaxOptions: new AjaxOptions { UpdateTargetId = "ajaxtarget" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal">
+                    @Html.TextBox("searchString", string.Empty, new { @class = "form-control", style = "display:inline;", @id = "searchinput" })
+                    <input type="submit" value="Search" class="btn btn-default" />
+                </div>
+            }</td>
+        </tr>
+        <tr>
+            <td width="150px;" valign="top">
+                <div class="treeview" data-role="treeview">
+                    <ul>
+                        @PrintCategory(Model.Categories, null)
+                    </ul>
+                </div>
+            </td>
+            <td valign="top" style="min-width:1024px;">
+                <div id="ajaxtarget">Please select category!</div>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>

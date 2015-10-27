@@ -1,0 +1,60 @@
+﻿@model IEnumerable<HelloWorld.Models.ViewModels.ServiceVM>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ServiceName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SLA)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SupportUrl)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ServiceSecurity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ServiceStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ServiceType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ServiceProvider.ProviderName)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SLA)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SupportUrl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceSecurity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceType)
+            <td>
+                @Html.DisplayFor(modelItem => item.ServiceProvider.ProviderName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ServiceId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ServiceId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ServiceId })
+            </td>
+        </tr>
+    }
+
+</table>
+

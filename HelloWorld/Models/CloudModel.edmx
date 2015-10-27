@@ -372,8 +372,8 @@
           <Property Name="ServiceCategoryParent" Type="Int32" />
           <Property Name="CategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Services" Relationship="Self.FK_Service_ServiceCategory" FromRole="ServiceCategory" ToRole="Service" />
-          <NavigationProperty Name="ServiceCategory1" Relationship="Self.FK_ServiceCategory_ServiceCategory" FromRole="ServiceCategory" ToRole="ServiceCategory1" />
-          <NavigationProperty Name="ServiceCategory2" Relationship="Self.FK_ServiceCategory_ServiceCategory" FromRole="ServiceCategory1" ToRole="ServiceCategory" />
+          <NavigationProperty Name="ChildrenCategory" Relationship="Self.FK_ServiceCategory_ServiceCategory" FromRole="ServiceCategory" ToRole="ServiceCategory1" />
+          <NavigationProperty Name="ParentCategory" Relationship="Self.FK_ServiceCategory_ServiceCategory" FromRole="ServiceCategory1" ToRole="ServiceCategory" />
         </EntityType>
         <EntityType Name="ServiceLog">
           <Key>
