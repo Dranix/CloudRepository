@@ -3,13 +3,31 @@
     ViewBag.Title = "Index";
     ViewBag.Sidemenu = true;
 }
-
+<script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    function chooseCate(cateId) {
+        $.ajax({
+            url: "@Url.Action("ListService", "Overview")",
+            type: this.method,
+            contentType: 'application/json; charset=utf-8',
+            data: {
+                'categoryId': cateId,
+                'searchString': document.getElementById('searchinput').value,
+                'serviceCost': document.getElementById('serviceCost').value,
+                'availability': document.getElementById('availability').value,
+                'responseTime': document.getElementById('responseTime').value
+            },
+            success: function (result) {
+                $('#ajaxtarget').html(result);
+            }
+        });
+    }
+</script>
 @functions{
     public HtmlString PrintCategory(ICollection<HelloWorld.Models.ViewModels.ServiceCategoryVM> list, HelloWorld.Models.ViewModels.ServiceCategoryVM parent)
     {
 
         string result = String.Empty;
-
         foreach (var item in list)
         {
             result += "<li>";
@@ -19,27 +37,20 @@
             }
             if (item.ServiceCategoryParent == null && parent == null)
             {
-                result += "<span class=\"leaf\">" + @Ajax.ActionLink(
-                        linkText: item.CategoryName
-                        , routeValues: new { categoryId = @item.ServiceCategoryId}
-                        , actionName: "ListService"
-                    , ajaxOptions: new AjaxOptions
-                    {
-                        UpdateTargetId = "ajaxtarget",
-                        InsertionMode = InsertionMode.Replace
-                    }) + "</span>";
+                result += "<span class=\"leaf\">" + "<a onclick=\"chooseCate(" + @item.ServiceCategoryId + ")\" > " + item.CategoryName + "</a>" + "</span>";
+                //result += "<span class=\"leaf\">" + @Ajax.ActionLink(
+                //    linkText: item.CategoryName
+                //    , routeValues: new { categoryId = @item.ServiceCategoryId }
+                //    , actionName: "ListService"
+                //, ajaxOptions: new AjaxOptions
+                //{
+                //    UpdateTargetId = "ajaxtarget",
+                //    InsertionMode = InsertionMode.Replace
+                //}) + "</span>";
             }
             else if (parent != null && parent.ChildrenCategory.Contains(item))
             {
-                result += "<span class=\"leaf\">" + @Ajax.ActionLink(
-                        linkText: item.CategoryName
-                        , routeValues: new { categoryId = @item.ServiceCategoryId}
-                        , actionName: "ListService"
-                    , ajaxOptions: new AjaxOptions
-                    {
-                        UpdateTargetId = "ajaxtarget",
-                        InsertionMode = InsertionMode.Replace
-                    }) + "</span>";
+                result += "<span class=\"leaf\">" + "<a onclick=\"chooseCate(" + @item.ServiceCategoryId + ")\" > " + item.CategoryName + "</a>" + "</span>";
             }
 
             if (item.ChildrenCategory.Count > 0)
@@ -63,6 +74,7 @@
         return new HtmlString(result);
     }
 }
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -76,20 +88,30 @@
 
     </div>
 
-    
-    <table>
-        <tr>
-            <td align="right" colspan="2">@using (Ajax.BeginForm(actionName: "ListService",
-                    controllerName: "Overview",
-                    ajaxOptions: new AjaxOptions { UpdateTargetId = "ajaxtarget" }))
+    <div class="gird">
+        <div class="row cells3">
+            <div class="cell colspan3" style="align-content:center;">
+                @using (Ajax.BeginForm(actionName: "ListService", controllerName: "Overview", ajaxOptions: new AjaxOptions { UpdateTargetId = "ajaxtarget" }))
             {
-                @Html.AntiForgeryToken()
-                <div class="form-horizontal">
-                    @Html.TextBox("searchString", string.Empty, new { @class = "form-control", style = "display:inline;", @id = "searchinput" })
-                    <input type="submit" value="Search" class="btn btn-default" />
-                </div>
-            }</td>
-        </tr>
+                    @Html.AntiForgeryToken()
+                    <div style="text-align:center">
+                        <div class="btn-group">
+                            @Html.TextBox("searchString", string.Empty, new { @class = "form-control", style = "display:inline;", @id = "searchinput" , @placeholder = "Service Name"})
+                            <span id="searchclear" class="glyphicon glyphicon-remove-circle"></span>
+                        </div>
+                        <input type="submit" value="Search" class="btn btn-default" />
+                    </div>
+                    <div style="text-align:center;">
+                        @Html.TextBox("serviceCost", string.Empty, new { @class = "form-control", style = "display:inline;", @placeholder= "Service Cost", @id = "serviceCost" })
+                        @Html.TextBox("availability", string.Empty, new { @class = "form-control", style = "display:inline;", @placeholder = "Availability", @id = "availability" })
+                        @Html.TextBox("responseTime", string.Empty, new { @class = "form-control", style = "display:inline;", @placeholder = "Response Time", @id = "responseTime" })
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <hr />
+    <table>
         <tr>
             <td width="150px;" valign="top">
                 <div class="treeview" data-role="treeview">

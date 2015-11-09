@@ -11,13 +11,13 @@
             @Html.DisplayNameFor(model => model.SupportUrl)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ServiceSecurity)
+            @Html.DisplayNameFor(model => model.ServiceCost)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ServiceStatus)
+            @Html.DisplayNameFor(model => model.Availability)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ServiceType)
+            @Html.DisplayNameFor(model => model.ResponseTime)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.ServiceProvider.ProviderName)
@@ -38,23 +38,23 @@
                 @Html.DisplayFor(modelItem => item.SupportUrl)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ServiceSecurity)
+                @Html.DisplayFor(modelItem => item.ServiceCost)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ServiceStatus)
+                @Html.DisplayFor(modelItem => item.Availability)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ServiceType)
+                @Html.DisplayFor(modelItem => item.ResponseTime)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ServiceProvider.ProviderName)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ServiceId }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ServiceId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ServiceId })
+                @Html.ActionLink("Edit", "Edit", "Services", new { id = item.ServiceId }, string.Empty) |
+                @Html.ActionLink("Details", "Details", "Services", new { id = item.ServiceId }, string.Empty) |
+                @Html.ActionLink("Delete", "Delete", "Services", new { id = item.ServiceId }, string.Empty)
             </td>
         </tr>
     }
 
 </table>
-

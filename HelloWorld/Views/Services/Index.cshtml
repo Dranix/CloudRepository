@@ -45,9 +45,6 @@
             @Html.ActionLink("Service Description", "Index", new { sortOrder = ViewBag.SortServiceDescription, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.ActionLink("SLA", "Index", new { sortOrder = ViewBag.SortSLA, currentFilter = ViewBag.CurrentFilter })
-        </th>
-        <th>
             @Html.ActionLink("Support Url", "Index", new { sortOrder = ViewBag.SortSupportUrl, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
@@ -58,9 +55,6 @@
         </th>
         <th>
             @Html.ActionLink("Service Status", "Index", new { sortOrder = ViewBag.SortServiceStatus, currentFilter = ViewBag.CurrentFilter })
-        </th>
-        <th>
-            @Html.ActionLink("Service Type", "Index", new { sortOrder = ViewBag.SortServiceType, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
             @Html.ActionLink("Category Name", "Index", new { sortOrder = ViewBag.SortCategoryName, currentFilter = ViewBag.CurrentFilter })
@@ -85,13 +79,6 @@
                 </a>
             </td>
             <td>
-                <a href="#" role="button" tabindex="0" data-toggle="popover" data-trigger="focus"  class="btn btn-link too-long" title="SLA" data-content='@Html.DisplayFor(modelItem => item.SLA)' data-placement="bottom" style="padding:0px;">
-                    <p class="truncate">
-                        @Html.DisplayFor(modelItem => item.SLA)
-                    </p>
-                </a>
-            </td>
-            <td>
                 <p class="truncate">
                     <a target="_blank" href="@Html.DisplayFor(modelItem => item.SupportUrl)">@Html.DisplayFor(modelItem => item.SupportUrl)</a>
                 </p>
@@ -105,10 +92,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ServiceStatus)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ServiceType)
+
                 @*@Html.Raw("<img src=\"data:image/jpeg;base64," + item.ServiceLogo + "\" />");*@
-            </td>
+
             <td>
                 @Html.DisplayFor(modelItem => item.ServiceCategory.CategoryName)
             </td>

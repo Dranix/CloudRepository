@@ -191,7 +191,7 @@ namespace HelloWorld.Controllers
             {
                 byte[] imageData = null;
 
-                if (uploadImage.ContentLength > 0)
+                if (uploadImage!= null && uploadImage.ContentLength > 0)
                 {
                     using (var binaryReader = new BinaryReader(uploadImage.InputStream))
                     {
@@ -257,7 +257,7 @@ namespace HelloWorld.Controllers
             {
                 byte[] imageData = null;
 
-                if (uploadImage.ContentLength > 0)
+                if (uploadImage != null && uploadImage.ContentLength > 0)
                 {
                     using (var binaryReader = new BinaryReader(uploadImage.InputStream))
                     {

@@ -16,54 +16,75 @@ namespace HelloWorld.Controllers
         public ActionResult Index()
         {
             OverviewVM vm = new OverviewVM();
-            vm.Categories= AutoMapper.Mapper.Map<List<ServiceCategoryVM>>(db.ServiceCategories.ToList());
+            vm.Categories = AutoMapper.Mapper.Map<List<ServiceCategoryVM>>(db.ServiceCategories.ToList());
 
             return View(vm);
         }
 
 
-        public ActionResult ListService(int? categoryId, string searchString)
+        public ActionResult ListService(int? categoryId, string searchString, string serviceCost, double? availability, double? responseTime)
         {
+
             if (categoryId == null)
             {
-                categoryId = (int)Session["categiryId"];
+                categoryId = (int?)Session["categiryId"];
             }
             else
             {
                 Session["categiryId"] = categoryId;
             }
 
-            if (String.IsNullOrEmpty(searchString))
+            ServiceCategory category;
+            List<int> cateArray = new List<int>();
+            if (categoryId == null)
             {
-                searchString = Session["searchString"] != null ? Session["searchString"].ToString() : null;
+                cateArray = db.ServiceCategories.Select(s => s.ServiceCategoryId).ToList();
             }
             else
             {
-                Session["searchString"] = searchString;
+                category = db.ServiceCategories.Where(s => s.ServiceCategoryId == categoryId).First();
+                cateArray.Add(category.ServiceCategoryId);
+                if (category.ServiceCategoryParent == null)
+                {
+                    foreach (var c in category.ChildrenCategory)
+                    {
+                        cateArray.Add(c.ServiceCategoryId);
+                    }
+                }
             }
 
-            var vm = AutoMapper.Mapper.Map<List<ServiceVM>>(db.Services.Where(s=>s.ServiceCategory.ServiceCategoryId == categoryId).ToList());
-            if (!String.IsNullOrEmpty(searchString))
+            var vm = AutoMapper.Mapper.Map<List<ServiceVM>>(db.Services.Where(s => cateArray.Contains(s.ServiceCategory.ServiceCategoryId)).ToList());
+
+            vm = vm.Where(s => s.ServiceName != null && s.ServiceName.ToLower().Contains(searchString)
+                                   || s.ServiceDescription != null && s.ServiceDescription.ToLower().Contains(searchString)
+                                   || s.SLA != null && s.SLA.ToLower().Contains(searchString)
+                                   || s.SupportUrl != null && s.SupportUrl.ToLower().Contains(searchString)
+                                   || s.ServiceSecurity != null && s.ServiceSecurity.ToLower().Contains(searchString)
+                                   || s.ServiceStatus != null && s.ServiceStatus.ToLower().Contains(searchString)
+                                   || s.ServiceType != null && s.ServiceType.ToLower().Contains(searchString)
+                                   || s.ServiceCategory != null && s.ServiceCategory.CategoryName.ToLower().Contains(searchString)
+                                   || s.ServiceProvider != null && s.ServiceProvider.ProviderName.ToLower().Contains(searchString)
+                                   ).ToList();
+            if (!string.IsNullOrEmpty(serviceCost))
             {
-                vm = vm.Where(s => s.ServiceName != null && s.ServiceName.ToLower().Contains(searchString)
-                                       || s.ServiceDescription != null && s.ServiceDescription.ToLower().Contains(searchString)
-                                       || s.SLA != null && s.SLA.ToLower().Contains(searchString)
-                                       || s.SupportUrl != null && s.SupportUrl.ToLower().Contains(searchString)
-                                       || s.ServiceCost != null && s.ServiceCost.ToLower().Contains(searchString)
-                                       || s.ServiceSecurity != null && s.ServiceSecurity.ToLower().Contains(searchString)
-                                       || s.ServiceStatus != null && s.ServiceStatus.ToLower().Contains(searchString)
-                                       || s.ServiceType != null && s.ServiceType.ToLower().Contains(searchString)
-                                       || s.ServiceCategory != null && s.ServiceCategory.CategoryName.ToLower().Contains(searchString)
-                                       || s.ServiceProvider != null && s.ServiceProvider.ProviderName.ToLower().Contains(searchString)
-                                       ).ToList();
+                vm = vm.Where(s => s.ServiceCost != null && s.ServiceCost.ToLower().Contains(serviceCost)).ToList();
             }
+
+            if (availability != null)
+            {
+                vm = vm.Where(s => s.ServiceVersions.SingleOrDefault() != null && Convert.ToDouble(s.ServiceVersions.SingleOrDefault().Availability.Replace("%", "")) > availability
+                ).ToList();
+            }
+
+            if (responseTime != null)
+            {
+                vm = vm.Where(s => s.ServiceVersions.SingleOrDefault() != null && Convert.ToDouble(s.ServiceVersions.SingleOrDefault().ResponseTime) < responseTime
+                ).ToList();
+            }
+
 
             return PartialView(vm);
         }
-
-
-
-
 
         public ActionResult SelectCategory(string sortOrder, string searchString, string currentFilter, int? page, int? CategoryId)
         {

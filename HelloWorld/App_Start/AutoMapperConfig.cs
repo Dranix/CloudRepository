@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Linq;
 
 namespace HelloWorld.App_Start
 {
@@ -17,7 +18,10 @@ namespace HelloWorld.App_Start
             Mapper.CreateMap<ServiceProviderVM, ServiceProvider>().ReverseMap();
 
             Mapper.CreateMap<Service, ServiceVM>()
-                .ForMember(dest => dest.ServiceLogo, op => op.ResolveUsing<ToServiceLogo>().FromMember(x => x.ServiceLogo)).ReverseMap();
+                .ForMember(dest => dest.ServiceLogo, op => op.ResolveUsing<ToServiceLogo>().FromMember(x => x.ServiceLogo))
+                .ForMember(dest => dest.Availability, op => op.MapFrom(s => s.ServiceVersions.FirstOrDefault() != null? s.ServiceVersions.FirstOrDefault().Availability : string.Empty))
+                .ForMember(dest => dest.ResponseTime, op => op.MapFrom(s => s.ServiceVersions.FirstOrDefault() != null ? s.ServiceVersions.FirstOrDefault().ResponseTime : string.Empty))
+                .ReverseMap();
 
             Mapper.CreateMap<OperationVM, Operation>().ReverseMap();
 
@@ -34,6 +38,8 @@ namespace HelloWorld.App_Start
             Mapper.CreateMap<ParameterVM, Parameter>().ReverseMap();
         }
     }
+
+
 
     public class ToUsingServices : ValueResolver<ICollection<Workflow>, Collection<Tuple<int, string>>>
     {
